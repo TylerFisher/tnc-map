@@ -5,3 +5,7 @@ dist/
 .env
 .env.local
 .vite/
+
+# Live-mode recovery journal. `.impeccable/live/config.json` is project config
+# and stays tracked; session state is local and disposable.
+.impeccable/live/sessions/

@@ -1,0 +1,7 @@
+{
+  "files": ["index.html"],
+  "exclude": ["public/embed-test.html"],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}
