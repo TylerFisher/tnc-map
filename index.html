@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tiny News Collective Member Map</title>
+    <meta
+      name="description"
+      content="An interactive map of Tiny News Collective member newsrooms across the United States and beyond."
+    />
+    <meta name="color-scheme" content="light" />
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="header__title">Our Member Network</h1>
+
+      <div
+        class="filters"
+        id="filters"
+        role="group"
+        aria-label="Filter members by membership tier"
+      ></div>
+
+      <p class="header__summary" id="summary" role="status"></p>
+    </header>
+
+    <main class="layout">
+      <!-- `region`, not `application`: the pins are individually tab-reachable,
+           so there is no need to force screen readers out of browse mode. -->
+      <div class="map" id="map" role="region" aria-label="Map of member newsrooms"></div>
+
+      <aside class="sidebar" aria-label="Members without a map location">
+        <div id="sidebar-content"></div>
+      </aside>
+    </main>
+
+    <footer class="footnote" id="footnote"></footer>
+
+    <noscript>
+      <p style="padding: 24px; font-family: sans-serif; font-size: 14px">
+        This map needs JavaScript to run. A full list of Tiny News Collective members is available
+        at
+        <a href="https://www.tinynewsco.org/">tinynewsco.org</a>.
+      </p>
+    </noscript>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

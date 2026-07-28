@@ -1,0 +1,35 @@
+{
+  "name": "tnc-member-map",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tiny News Collective member map — embeddable static map of TNC member newsrooms.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "sync": "node --env-file-if-exists=.env --import tsx scripts/sync.ts",
+    "sync:check": "node --env-file-if-exists=.env --import tsx scripts/sync.ts --check"
+  },
+  "dependencies": {
+    "@fontsource/libre-baskerville": "^5.3.0",
+    "@fontsource/work-sans": "^5.3.0",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.12",
+    "@types/leaflet.markercluster": "^1.5.4",
+    "@types/node": "^22.10.0",
+    "@types/papaparse": "^5.3.15",
+    "papaparse": "^5.4.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "zod": "^3.24.1"
+  }
+}

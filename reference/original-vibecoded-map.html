@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tiny News Collective Member Map</title>
+
+<!-- ============================================================
+  TNC MEMBER MAP
+  How it works:
+  1. Set SHEET_CSV_URL below to your published Google Sheet CSV link
+     (File > Share > Publish to web > select the sheet > CSV).
+  2. If SHEET_CSV_URL is empty, the map uses the fallback data
+     embedded at the bottom of this file, so it works immediately.
+  3. Required columns: name, tier, type, city, state, lat, lng,
+     description, url, status, notes
+     - type "place" rows with lat/lng become pins
+     - type "beat" rows appear in the side list
+     - rows without coordinates are skipped (counted in the footer)
+  Brand colors live in the :root CSS variables just below.
+============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+
+<style>
+  :root {
+    /* Edit these to match TNC brand */
+    --ink: #20242c;
+    --paper: #fcfbf8;
+    --line: #e6e2d8;
+    --muted: #6b7078;
+    --tier-publisher: #0f6b6b;   /* Publisher pins */
+    --tier-community: #d96c3f;   /* Community pins */
+    --tier-alumni: #7a7e8c;      /* Alumni pins (hollow) */
+    --font: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font);
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  header h1 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-right: auto;
+  }
+
+  #counts {
+    font-size: 12.5px;
+    color: var(--muted);
+    width: 100%;
+    order: 3;
+  }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .pill {
+    font-family: var(--font);
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1.5px solid var(--line);
+    background: #fff;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 5px 12px 5px 9px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: border-color .15s, color .15s;
+  }
+  .pill .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--c); border: 2px solid var(--c);
+    flex: none;
+  }
+  .pill[data-tier="Alumni"] .dot { background: #fff; }
+  .pill[aria-pressed="true"] { border-color: var(--c); color: var(--ink); }
+  .pill[aria-pressed="false"] { opacity: .45; }
+  .pill:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- Layout ---------- */
+  main { flex: 1; display: flex; min-height: 0; }
+
+  #map { flex: 1; min-height: 420px; background: #eef0ef; }
+
+  aside {
+    width: 272px;
+    flex: none;
+    border-left: 1px solid var(--line);
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  aside h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--muted);
+  }
+  aside p.sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 4px 0 12px;
+    line-height: 1.45;
+  }
+
+  .beat-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: #fff;
+  }
+  .beat-card a {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 13.5px;
+    text-decoration: none;
+  }
+  .beat-card a:hover { text-decoration: underline; }
+  .beat-card .desc { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 7px;
+  }
+  .badge.Publisher { background: var(--tier-publisher); }
+  .badge.Community { background: var(--tier-community); }
+  .badge.Alumni { background: var(--tier-alumni); }
+
+  footer {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 7px 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ---------- Markers & popups ---------- */
+  .pin {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.35);
+  }
+  .pin.Publisher { background: var(--tier-publisher); }
+  .pin.Community { background: var(--tier-community); }
+  .pin.Alumni { background: #fff; border-color: var(--tier-alumni); box-shadow: 0 0 0 1.5px var(--tier-alumni), 0 1px 4px rgba(0,0,0,.25); }
+
+  .cluster {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,.3);
+  }
+
+  .leaflet-popup-content-wrapper { border-radius: 8px; font-family: var(--font); }
+  .leaflet-popup-content { margin: 12px 14px; line-height: 1.45; }
+  .popup-name { font-weight: 700; font-size: 14px; color: var(--ink); text-decoration: none; }
+  .popup-name:hover { text-decoration: underline; }
+  .popup-loc { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .popup-desc { font-size: 12.5px; margin-top: 6px; }
+
+  @media (max-width: 720px) {
+    main { flex-direction: column; }
+    #map { min-height: 380px; }
+    aside { width: 100%; border-left: none; border-top: 1px solid var(--line); max-height: 240px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Our Member Network</h1>
+  <div class="filters" role="group" aria-label="Filter by membership tier">
+    <button class="pill" data-tier="Publisher" style="--c: var(--tier-publisher)" aria-pressed="true"><span class="dot"></span>Publisher</button>
+    <button class="pill" data-tier="Community" style="--c: var(--tier-community)" aria-pressed="true"><span class="dot"></span>Community</button>
+    <button class="pill" data-tier="Alumni" style="--c: var(--tier-alumni)" aria-pressed="true"><span class="dot"></span>Alumni</button>
+  </div>
+  <div id="counts"></div>
+</header>
+
+<main>
+  <div id="map" role="region" aria-label="Map of Tiny News Collective members"></div>
+  <aside>
+    <h2>National &amp; Beat-Based Members</h2>
+    <p class="sub">Members defined by what they cover rather than where.</p>
+    <div id="beat-list"></div>
+  </aside>
+</main>
+
+<footer id="footnote"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<script>
+/* ====================== CONFIG ====================== */
+// Paste your published Google Sheet CSV URL between the quotes.
+// Leave empty to use the fallback data embedded below.
+const SHEET_CSV_URL = "";
+/* ==================================================== */
+
+const activeTiers = new Set(["Publisher", "Community", "Alumni"]);
+let allRows = [];
+let map, clusterGroup;
+
+// Wait until the whole page (including the embedded data block) is parsed
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", start);
+} else {
+  start();
+}
+
+function start() {
+  init().catch(err => {
+    console.error(err);
+    document.getElementById("counts").textContent = "Map error: " + err.message;
+  });
+}
+
+async function init() {
+  if (typeof L === "undefined") {
+    document.getElementById("map").innerHTML =
+      '<p style="padding:24px;font-size:13px;color:#6b7078">The map library could not load. Check your internet connection, then refresh.</p>';
+    return;
+  }
+  map = L.map("map", { scrollWheelZoom: false, worldCopyJump: true });
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 18
+  }).addTo(map);
+  map.setView([39.8, -98.5], 4); // shown while data loads
+
+  // If the clustering plugin failed to load, fall back to plain markers
+  clusterGroup = (typeof L.markerClusterGroup === "function")
+    ? L.markerClusterGroup({
+        maxClusterRadius: 36,
+        showCoverageOnHover: false,
+        iconCreateFunction: c => L.divIcon({
+          html: '<div class="cluster" style="width:30px;height:30px">' + c.getChildCount() + "</div>",
+          className: "", iconSize: [30, 30]
+        })
+      })
+    : L.featureGroup();
+  map.addLayer(clusterGroup);
+
+  const csvText = await loadCsv();
+  const parsed = Papa.parse(csvText.trim(), { header: true, skipEmptyLines: true });
+  allRows = parsed.data.map(r => ({
+    name: (r.name || "").trim(),
+    tier: (r.tier || "").trim(),
+    type: (r.type || "place").trim().toLowerCase(),
+    city: (r.city || "").trim(),
+    state: (r.state || "").trim(),
+    lat: parseFloat(r.lat),
+    lng: parseFloat(r.lng),
+    description: (r.description || "").trim(),
+    url: (r.url || "").trim()
+  })).filter(r => r.name);
+
+  render(true);
+  document.querySelectorAll(".pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tier = btn.dataset.tier;
+      activeTiers.has(tier) ? activeTiers.delete(tier) : activeTiers.add(tier);
+      btn.setAttribute("aria-pressed", activeTiers.has(tier));
+      render(false);
+    });
+  });
+}
+
+async function loadCsv() {
+  if (SHEET_CSV_URL) {
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (res.ok) return await res.text();
+      console.warn("Sheet fetch failed (" + res.status + "); using fallback data.");
+    } catch (e) {
+      console.warn("Sheet fetch error; using fallback data.", e);
+    }
+  }
+  return document.getElementById("fallback-data").textContent;
+}
+
+function render(fitToData) {
+  clusterGroup.clearLayers();
+  const visible = allRows.filter(r => activeTiers.has(r.tier));
+
+  // Pins
+  const pinRows = visible.filter(r => r.type === "place" && isFinite(r.lat) && isFinite(r.lng));
+  const markers = pinRows.map(r => {
+    const m = L.marker([r.lat, r.lng], {
+      icon: L.divIcon({ html: '<div class="pin ' + r.tier + '"></div>', className: "", iconSize: [14, 14], iconAnchor: [7, 7] }),
+      title: r.name, alt: r.name
+    });
+    m.bindPopup(popupHtml(r));
+    return m;
+  });
+  if (typeof clusterGroup.addLayers === "function") {
+    clusterGroup.addLayers(markers);
+  } else {
+    markers.forEach(m => clusterGroup.addLayer(m));
+  }
+
+  if (fitToData && markers.length) {
+    map.fitBounds(L.featureGroup(markers).getBounds(), { padding: [30, 30], maxZoom: 6 });
+  }
+
+  // Beat list
+  const beatRows = visible.filter(r => r.type === "beat");
+  document.getElementById("beat-list").innerHTML = beatRows.map(r =>
+    '<div class="beat-card">' +
+      (r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.name) + "</a>"
+             : '<span style="font-weight:600;font-size:13.5px">' + esc(r.name) + "</span>") +
+      (r.description ? '<div class="desc">' + esc(r.description) + "</div>" : "") +
+      '<span class="badge ' + r.tier + '">' + esc(r.tier) + "</span>" +
+    "</div>"
+  ).join("") || '<p class="sub">None in the selected tiers.</p>';
+
+  // Counts
+  const count = t => allRows.filter(r => r.tier === t).length;
+  const states = new Set(pinRows.map(r => r.state).filter(Boolean));
+  document.getElementById("counts").textContent =
+    count("Publisher") + " publisher members · " + count("Community") + " community members · " +
+    count("Alumni") + " alumni · pins across " + states.size + " states and territories";
+
+  // Footer
+  const pending = allRows.filter(r => r.type === "place" && (!isFinite(r.lat) || !isFinite(r.lng))).length;
+  document.getElementById("footnote").textContent =
+    pending > 0 ? pending + " members will appear once their locations are added to the sheet." : "";
+}
+
+function popupHtml(r) {
+  const loc = [r.city, r.state].filter(Boolean).join(", ");
+  return (r.url
+      ? '<a class="popup-name" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.name) + "</a>"
+      : '<span class="popup-name">' + esc(r.name) + "</span>") +
+    (loc ? '<div class="popup-loc">' + esc(loc) + "</div>" : "") +
+    (r.description ? '<div class="popup-desc">' + esc(r.description) + "</div>" : "") +
+    '<span class="badge ' + r.tier + '">' + esc(r.tier) + "</span>";
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+</script>
+
+<!-- Fallback data: used only when SHEET_CSV_URL is empty or unreachable.
+     Once your Google Sheet is live, this is just a safety net. -->
+<script type="text/csv" id="fallback-data">
+name,tier,type,city,state,lat,lng,description,url,status,notes
+505omatic,Publisher,place,Albuquerque,NM,35.0844,-106.6504,Community news for Albuquerque,https://www.instagram.com/505omatic/,OK,
+Aging in America,Publisher,beat,,,,,News and reporting on aging and older adults,https://aginginamerica.news/,OK,
+Ang Diaryo,Publisher,place,,,,,News for the Filipino community,https://angdiaryo.org/,NEEDS LOCATION,
+Atlantic City Focus,Publisher,place,Atlantic City,NJ,39.3643,-74.4229,Community news for Atlantic City,https://www.atlanticcityfocus.com/,OK,
+Barrenside,Publisher,place,Glasgow,KY,36.9959,-85.9119,Community news for Barren County,https://barrenside.com/,CHECK,
+Beaufort Journalism,Publisher,place,Beaufort,SC,32.4316,-80.6698,Community news for Beaufort,https://www.thebeaufortblog.com/,CHECK,
+Black Belt News Network,Publisher,place,Selma,AL,32.4074,-87.0211,News for Alabama's Black Belt region,https://www.blackbeltnewsnetwork.com/,CHECK,
+Bottom Up Media,Publisher,place,,,,,,https://theunfortunatetruth.substack.com/,NEEDS LOCATION,
+Caribbean Television Network,Publisher,place,Brooklyn,NY,40.6782,-73.9442,News for the Caribbean diaspora,https://ctninfo.com/,CHECK,
+"Climate, Gendered",Publisher,beat,,,,,Climate change reporting through a gender lens,https://www.climategendered.com/,OK,
+COYOTE,Publisher,place,,,,,,https://www.coyotemedia.org/,NEEDS LOCATION,
+Crosswinds,Publisher,place,,,,,,https://www.crosswindsnews.net/,NEEDS LOCATION,
+Eden Prairie Local News,Publisher,place,Eden Prairie,MN,44.8547,-93.4708,Community news for Eden Prairie,https://www.eplocalnews.org/,OK,
+Esta Es La Cosa,Publisher,place,,,,,Spanish-language community news,https://estaeslacosa.com/,NEEDS LOCATION,
+Five Wards Media,Publisher,place,Houston,TX,29.7604,-95.3698,Community news rooted in Houston's historic wards,https://www.fivewardsmedia.com/,CHECK,
+Four Points Press,Publisher,place,Austin,TX,30.3950,-97.8470,Community news for the Four Points area,https://fourpointspress.com/,CHECK,
+Future Tides,Publisher,place,Seattle,WA,47.6062,-122.3321,Water access and maritime news for Puget Sound,https://www.futuretides.org/,CHECK,
+Health Nation,Publisher,beat,,,,,Health reporting,,NEEDS LOCATION,
+Hola Cultura,Publisher,place,Washington,DC,38.9072,-77.0369,Latino arts and culture in Washington DC,https://holacultura.com/,OK,
+Juri•See,Publisher,beat,,,,,Courts and legal system coverage,https://www.jurisee.com/,CHECK,
+Kaheāwai Media,Publisher,place,Honolulu,HI,21.3069,-157.8583,Native Hawaiian community news,https://kaheawaimedia.com/,CHECK,
+La Conner Community News,Publisher,place,La Conner,WA,48.3915,-122.4974,Community news for La Conner,https://laconnercommunitynews.org/,OK,
+La Verne Daily News,Publisher,place,La Verne,CA,34.1008,-117.7678,Community news for La Verne,https://lavernedaily.substack.com/,OK,
+Mahalaya,Publisher,place,Chicago,IL,41.8781,-87.6298,Filipino American community news and zines,https://www.tinynewsco.org/print-makes-a-comeback-community-zines-are-part-of-tnc-founders-product-mix/,CHECK,
+Margins to Mainstream,Publisher,place,,,,,,,NEEDS LOCATION,
+Mat-Su Sentinel,Publisher,place,Wasilla,AK,61.5814,-149.4394,News for the Matanuska-Susitna Borough,https://www.matsusentinel.com/,OK,
+Miami Affordable Magazine,Publisher,place,Miami,FL,25.7617,-80.1918,Affordability and housing news for Miami,https://www.miaaffordablemagazine.org/,OK,
+News Relay Network,Publisher,place,,,,,,https://newsrelaynetwork.org/,NEEDS LOCATION,
+Organ Mountain News,Publisher,place,Las Cruces,NM,32.3199,-106.7637,Community news for Las Cruces,https://www.organmountainnews.com/,OK,
+Ottawa News Network,Publisher,place,Ottawa,IL,41.3456,-88.8426,Community news for Ottawa,https://www.ottawanewsnetwork.org/,CHECK,
+Petaluma Voice,Publisher,place,Petaluma,CA,38.2324,-122.6367,Community news for Petaluma,https://petaluma-voice.monkeypod.io/give/support-petaluma-voice,OK,
+Philly-Afghan Info Hub,Publisher,place,Philadelphia,PA,39.9526,-75.1652,News and information for Philadelphia's Afghan community,https://www.phillyafghaninfohub.org/,OK,
+Pittsburgh Manifold,Publisher,place,Pittsburgh,PA,40.4406,-79.9959,Community news for Pittsburgh,https://www.pittsburghmanifold.com/,OK,
+Planeta Venus,Publisher,place,Sacramento,CA,38.5816,-121.4944,Spanish-language community news,https://www.planetavenus.online/,CHECK,
+Prior Lake News Compass,Publisher,place,Prior Lake,MN,44.7133,-93.4227,Community news for Prior Lake,https://plnewscompass.org/,OK,
+Queer & Trans Wealth,Publisher,beat,,,,,Personal finance for queer and trans communities,https://www.queerandtranswealth.org/,OK,
+Roseville Reader,Publisher,place,Roseville,MN,45.0061,-93.1566,Community news for Roseville,https://www.rosevillereader.com/,CHECK,
+San Pedro Gazette,Publisher,place,San Pedro,CA,33.7361,-118.2922,Community news for San Pedro,https://sanpedrogazette.com/,OK,
+Scene in Boston,Publisher,place,Boston,MA,42.3601,-71.0589,Community news for Boston,https://www.sceneinboston.org/,OK,
+Spotlight Schools,Publisher,place,Los Alamitos,CA,33.8031,-118.0726,Education news for local schools,https://www.spotlightschools.com/,CHECK,
+Sprawlism,Publisher,place,Houston,TX,29.7500,-95.3600,Urbanism and development news,https://www.sprawlism.com/,CHECK,
+Synonym Magazine,Publisher,place,,,,,,https://www.synonym-mag.com/,NEEDS LOCATION,
+Tayo,Publisher,beat,,,,,Help and information for the Filipino diaspora,https://www.tayohelp.com/,OK,
+The 51st,Publisher,place,Washington,DC,38.9100,-77.0250,Community news for Washington DC,https://51st.news/,OK,
+The Carrborean,Publisher,place,Carrboro,NC,35.9101,-79.0753,Community news for Carrboro,https://www.thecarrborean.com/,OK,
+The Edge,Publisher,place,Berea,KY,37.5687,-84.2963,Community news for Berea,https://theedgebereaky.com/,OK,
+The LA Reporter,Publisher,place,Los Angeles,CA,34.0522,-118.2437,Community news for Los Angeles,https://thelareporter.la/,OK,
+The Latino Newsletter,Publisher,beat,,,,,National news for and about Latino communities,https://thelatinonewsletter.org/,OK,
+The Leveler,Publisher,place,,,,,,https://www.thelevelernews.com/,NEEDS LOCATION,
+The Lighthouse,Publisher,place,New York,NY,40.7128,-74.0060,Community news for New York City,https://thelighthousenyc.org/,OK,
+The Neighborly,Publisher,place,Wytheville,VA,36.9485,-81.0848,Community news for Southwest Virginia,https://www.swvacountry.com/,CHECK,
+The Optimist,Publisher,place,Minneapolis,MN,45.0260,-93.3000,Community news for North Minneapolis,http://theoptimist.mn/,CHECK,
+The Oxford Free Press,Publisher,place,Oxford,OH,39.5070,-84.7452,Community news for Oxford,https://www.oxfreepress.com/,CHECK,
+The School of US,Publisher,beat,,,,,Education reporting,,NEEDS LOCATION,
+The SHOUT,Publisher,place,Wichita,KS,37.6872,-97.3301,Community news for Wichita,https://www.shoutwichita.com/,OK,
+The Southlander,Publisher,place,Harvey,IL,41.5500,-87.6500,News for the Chicago Southland,https://thesouthlander.com/,CHECK,
+The VP Chicago,Publisher,place,Chicago,IL,41.8700,-87.6500,Community news for Chicago,https://www.thevpchicago.org/,OK,
+TMBP Media,Publisher,beat,,,,,Higher education and Black professional life,https://www.themillennialblackprofessor.com/,CHECK,
+Tucker County Observer,Publisher,place,Parsons,WV,39.0962,-79.6809,Community news for Tucker County,https://www.linkedin.com/in/thomas-yocum-803b2b93/,OK,
+Tucson Spotlight,Publisher,place,Tucson,AZ,32.2226,-110.9747,Community news for Tucson,https://www.tucsonspotlight.org/,OK,
+Uplands-Uplifting News,Publisher,place,Upland,CA,34.0975,-117.6484,Community news for the Uplands,https://www.uplandsupliftingnews.com/,CHECK,
+WBR Independent,Publisher,place,Port Allen,LA,30.4524,-91.2101,Community news for West Baton Rouge Parish,https://wbrindependent.com/,OK,
+Whittier Informed,Publisher,place,Whittier,CA,33.9792,-118.0328,Community news for Whittier,,CHECK,
+Witness PA,Publisher,place,,PA,,,News for Pennsylvania communities,,NEEDS LOCATION,
+Woodbury News Net,Publisher,place,Woodbury,MN,44.9239,-92.9594,Community news for Woodbury,https://woodburynewsnet.org/,OK,
+Austin Vida,Community,place,Austin,TX,30.2672,-97.7431,Latino arts and culture in Austin,https://www.austinvida.com/,OK,
+Autonomy News,Community,beat,,,,,Disability news and reporting,https://www.autonomynews.co/,CHECK,
+Black by God,Community,place,Charleston,WV,38.3498,-81.6326,News by and for Black West Virginians,https://blackbygod.org/,OK,
+Carver County Local News,Community,place,Chaska,MN,44.7894,-93.6022,Community news for Carver County,https://cclocalnews.org/,OK,
+Community Voices,Community,place,,VA,,,Community news for Virginia,https://www.communityvoicesva.org/,NEEDS LOCATION,
+Connect Puerto Rico,Community,place,San Juan,PR,18.4655,-66.1057,News and information for Puerto Rico,https://www.connect-puertorico.com/,CHECK,
+Dark Roast Report,Community,place,,,,,,https://dark-roast-report.ghost.io/,NEEDS LOCATION,
+eShe,Community,place,New Delhi,,28.6139,77.2090,Women-led magazine published from India,http://www.eshe.in/,OK,
+Ethiopique,Community,place,,,,,News for the Ethiopian diaspora,https://ethiopique.com/,NEEDS LOCATION,
+Harvey World Herald,Community,place,Harvey,IL,41.6100,-87.6467,Community news for Harvey,https://harveyworld.org/,OK,
+Investigate LA,Community,place,Los Angeles,CA,34.0600,-118.2500,Investigative reporting for Los Angeles,https://investigatela.org/,OK,
+Lehigh Daily,Community,place,Allentown,PA,40.6023,-75.4714,News for the Lehigh Valley,https://lehighdaily.com/,CHECK,
+Mendo Local,Community,place,Ukiah,CA,39.1502,-123.2078,Community news for Mendocino County,https://www.mendolocal.news/,OK,
+Newsberg,Community,place,Newberg,OR,45.3001,-122.9732,Community news for Newberg,https://newsberg.org/,OK,
+Nuestro Estado,Community,place,Columbia,SC,34.0007,-81.0348,Spanish-language news for South Carolina,https://nuestroestado.com/,CHECK,
+Southpoint Access,Community,place,,,,,,https://southpointaccess.news/,NEEDS LOCATION,
+Stumptown Savings,Community,place,Portland,OR,45.5152,-122.6784,Deals and affordability news for Portland,https://stumptownsavings.com/,OK,
+Super Empty,Community,place,Portland,OR,45.5200,-122.6700,Urbanism and city life coverage,https://www.superempty.com/,CHECK,
+The Fact Effect,Community,place,,,,,,http://www.thefacteffect.com/,NEEDS LOCATION,
+The Intersection Magazine,Community,place,,,,,,https://www.theintersectionmag.com/,NEEDS LOCATION,
+The Parlor Magazine,Community,place,,,,,,https://www.theparlormagazine.com/,NEEDS LOCATION,
+The Platia,Community,place,,,,,,https://theplatia.com/,NEEDS LOCATION,
+Winston Salem Sentinel,Community,place,Winston-Salem,NC,36.0999,-80.2442,Community news for Winston-Salem,,OK,
+2Puntos Platform/VozColectiva,Alumni,place,Hartford,CT,41.7658,-72.6734,Spanish-language news and storytelling,https://2puntosplatform.com/,CHECK,
+BLCK Press,Alumni,place,Minneapolis,MN,44.9778,-93.2650,News by and for Black communities,https://www.blckpress.com/,CHECK,
+BoriMás,Alumni,place,,,,,News for the Puerto Rican diaspora,https://borimas.com/,NEEDS LOCATION,
+Brunswick Bird Media,Alumni,place,,,,,Community news for Brunswick,https://thebrunswickbird.com/,NEEDS LOCATION,
+D&N Sportscast,Alumni,beat,,,,,Sports coverage,,NEEDS LOCATION,
+Estes Valley Voice,Alumni,place,Estes Park,CO,40.3772,-105.5217,Community news for the Estes Valley,https://estesvalleyvoice.com/,OK,
+Get Involved Zuni,Alumni,place,Zuni Pueblo,NM,35.0717,-108.8506,Civic news and engagement for Zuni Pueblo,https://www.facebook.com/people/Get-Involved-Zuni/100063626340017/,OK,
+Moodfuel,Alumni,place,Colorado Springs,CO,38.8339,-104.8214,Mental health news for Colorado,https://moodfuel.org/,CHECK,
+Proof Media,Alumni,place,,,,,,,NEEDS LOCATION,
+Rascal News,Alumni,beat,,,,,Worker-owned tabletop games journalism,https://www.rascal.news/,OK,
+San Angelo News Journal,Alumni,place,San Angelo,TX,31.4638,-100.4370,Community news for San Angelo,,OK,
+Sipp Talk,Alumni,place,Utica,MS,32.1043,-90.6204,Community storytelling in rural Mississippi,https://sippculture.org/jasmine-williams/,CHECK,
+The Torch of Montclair,Alumni,place,Montclair,NJ,40.8259,-74.2090,Community news for Montclair,https://www.torchofmontclair.com/,OK,
+UpLift Chronicles,Alumni,place,Albuquerque,NM,35.0844,-106.6504,Solutions news for New Mexico,https://www.upliftnewmexico.org/,CHECK,
+Ravenous,Community,beat,,,,,Worker-owned food and culture writing,,CHECK,
+</script>
+
+</body>
+</html>

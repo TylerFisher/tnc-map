@@ -1,0 +1,558 @@
+/* ==========================================================================
+   Tiny News Collective member map
+
+   All brand values live in the custom properties below. Changing the palette
+   or typefaces should not require touching anything further down this file.
+   ========================================================================== */
+
+:root {
+  /* ---- TNC brand ---- */
+  --brand-gold: rgb(243 196 98); /* #f3c462 */
+  --brand-navy: rgb(27 29 67); /* #1b1d43 */
+  --brand-sand: rgb(237 231 221); /* #ede7dd */
+
+  /* ---- Derived surface palette ---- */
+  --ink: var(--brand-navy);
+  --paper: var(--brand-sand);
+  /* Warm white rather than pure white, so cards lift off sand without going cold. */
+  --surface: #fffdf9;
+  --line: #d5ccbd;
+  /* Navy desaturated to a readable secondary. 4.5:1+ on both paper and surface. */
+  --muted: #55587a;
+
+  /* ---- Tier colours ----
+     Publisher is the brand navy, Community the brand gold, Alumni a faded
+     navy — the tiers stay inside the brand palette rather than importing
+     three unrelated hues. Alumni additionally renders hollow on the map,
+     which is what actually distinguishes it for anyone who cannot rely on
+     colour alone. */
+  --tier-Publisher: var(--brand-navy);
+  --tier-Community: var(--brand-gold);
+  --tier-Alumni: #5c5f85;
+
+  /* Gold is far too light to carry white text; navy on gold clears 7:1. */
+  --badge-fg-Publisher: #fffdf9;
+  --badge-fg-Community: var(--brand-navy);
+  --badge-fg-Alumni: #fffdf9;
+
+  /* ---- Typography ---- */
+  --font-heading: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ---- Metrics ---- */
+  --sidebar-width: 300px;
+  /* Only consulted in auto-height mode; otherwise the map fills the frame. */
+  --map-height: 520px;
+  --radius: 8px;
+  --focus: 2px solid var(--brand-navy);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Header ---------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 15px 18px 13px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+
+.header__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  margin-right: auto;
+}
+
+.header__summary {
+  font-size: 12.5px;
+  color: var(--muted);
+  width: 100%;
+  order: 3;
+  min-height: 1em;
+  line-height: 1.4;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 5px 8px 5px 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    opacity 0.15s;
+}
+
+.pill__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--tier-color);
+  border: 2px solid var(--tier-color);
+}
+
+.pill__count {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--paper);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.pill[data-tier='Publisher'] {
+  --tier-color: var(--tier-Publisher);
+}
+.pill[data-tier='Community'] {
+  --tier-color: var(--tier-Community);
+}
+.pill[data-tier='Alumni'] {
+  --tier-color: var(--tier-Alumni);
+}
+
+/* Alumni reads as "past member": hollow dot on the pill, hollow pin on the map. */
+.pill[data-tier='Alumni'] .pill__dot {
+  background: var(--surface);
+}
+
+.pill[aria-pressed='true'] {
+  border-color: var(--tier-color);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.pill[aria-pressed='false'] {
+  opacity: 0.45;
+}
+
+/* ---------- Layout ---------------------------------------------------- */
+
+.layout {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.map {
+  flex: 1;
+  min-height: 0;
+  /* Sand-tinted so the loading state matches the brand rather than flashing grey. */
+  background: #e4ded4;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  flex: none;
+  background: var(--paper);
+  border-left: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* ---------- Sidebar groups -------------------------------------------- */
+
+.group + .group {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.group__title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.group__count {
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  background: var(--line);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-size: 10.5px;
+}
+
+.group__blurb {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 6px 0 12px;
+  line-height: 1.45;
+}
+
+.cards {
+  list-style: none;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 11px 12px;
+  margin-bottom: 8px;
+  background: var(--surface);
+}
+
+.card__name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-block;
+}
+
+a.card__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.card__hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.card__desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.sidebar__empty {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ---------- Badges ---------------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 8px;
+}
+
+.badge--Publisher {
+  background: var(--tier-Publisher);
+  color: var(--badge-fg-Publisher);
+}
+.badge--Community {
+  background: var(--tier-Community);
+  color: var(--badge-fg-Community);
+}
+.badge--Alumni {
+  background: var(--tier-Alumni);
+  color: var(--badge-fg-Alumni);
+}
+
+/* ---------- Map markers ----------------------------------------------- */
+
+.pin {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 4px rgb(27 29 67 / 40%);
+}
+
+.pin--Publisher {
+  background: var(--tier-Publisher);
+}
+
+/* Gold is light enough to disappear against pale basemap tiles, so it gets a
+   navy halo in addition to the white ring every pin carries. */
+.pin--Community {
+  background: var(--tier-Community);
+  box-shadow:
+    0 0 0 1.5px rgb(27 29 67 / 45%),
+    0 1px 4px rgb(27 29 67 / 35%);
+}
+
+.pin--Alumni {
+  background: var(--surface);
+  border-color: var(--tier-Alumni);
+  box-shadow:
+    0 0 0 1.5px var(--tier-Alumni),
+    0 1px 4px rgb(27 29 67 / 25%);
+}
+
+.leaflet-marker-icon:focus-visible .pin {
+  outline: var(--focus);
+  outline-offset: 3px;
+}
+
+.cluster {
+  width: 32px;
+  height: 32px;
+  background: var(--brand-navy);
+  color: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 5px rgb(27 29 67 / 35%);
+}
+
+/* ---------- Popups ---------------------------------------------------- */
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.leaflet-popup-tip {
+  background: var(--surface);
+}
+
+.leaflet-popup-content {
+  margin: 13px 15px;
+  line-height: 1.45;
+}
+
+.popup__name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-block;
+}
+
+a.popup__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.popup__loc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.popup__desc {
+  font-size: 12.5px;
+  margin-top: 7px;
+  line-height: 1.45;
+}
+
+/* ---------- Map controls ---------------------------------------------- */
+
+.fit-all[hidden] {
+  display: none;
+}
+
+.fit-all__button {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: var(--surface);
+  border: none;
+  padding: 7px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fit-all__button:hover {
+  background: var(--paper);
+}
+
+/* The count is the honest part: it says how many members are off-screen. */
+.fit-all__count {
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--brand-gold);
+  color: var(--brand-navy);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.leaflet-bar a,
+.leaflet-control-zoom a {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.leaflet-container {
+  font-family: var(--font-body);
+}
+
+/* ---------- Footer ---------------------------------------------------- */
+
+.footnote {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 8px 18px;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.footnote__sep {
+  opacity: 0.5;
+}
+
+/* ---------- Embed modes ----------------------------------------------- */
+
+/* The host page supplies its own heading, so ours would be a duplicate. */
+.is-embedded .header__title {
+  display: none;
+}
+
+.is-embedded .header {
+  padding: 11px 14px 10px;
+}
+
+.is-embedded .footnote {
+  padding: 7px 14px;
+}
+
+/* Content-driven height, for parents that resize the iframe from postMessage. */
+.is-autoheight,
+.is-autoheight body {
+  height: auto;
+}
+
+.is-autoheight .layout {
+  flex: none;
+}
+
+.is-autoheight .map {
+  height: var(--map-height);
+  flex: 1 1 60%;
+}
+
+.is-autoheight .sidebar {
+  overflow-y: visible;
+  max-height: none;
+}
+
+/* ---------- Responsive ------------------------------------------------ */
+
+@media (max-width: 760px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .map {
+    min-height: 380px;
+    flex: 1 1 auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--line);
+    max-height: 45vh;
+  }
+
+  .is-autoheight .sidebar {
+    max-height: none;
+  }
+
+  .header__title {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #3c3f5e;
+    --line: #a89e8c;
+  }
+}

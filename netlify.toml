@@ -1,0 +1,16 @@
+# Netlify deploy configuration.
+#
+# Response headers live in `public/_headers` rather than here, because that file
+# is also read verbatim by Cloudflare Pages — keeping the headers there means
+# switching hosts does not silently drop the frame-ancestors policy that lets
+# Ghost embed the map.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# `npm run build` runs `tsc --noEmit` first, so a type error fails the deploy
+# rather than shipping a broken map.

@@ -1,0 +1,27 @@
+# Response headers for Netlify and Cloudflare Pages (both read this file).
+#
+# The critical line is `frame-ancestors`. Without an explicit policy some hosts
+# default to `X-Frame-Options: SAMEORIGIN`, which makes the Ghost embed render
+# as a blank box with a console error and no other clue as to why.
+#
+# ▸ EDIT THIS if the Ghost site lives on a different domain. Every origin that
+#   should be allowed to frame the map must be listed. Subdomain wildcards are
+#   permitted; paths are not.
+
+/*
+  Content-Security-Policy: frame-ancestors 'self' https://tinynewsco.org https://*.tinynewsco.org
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+# Vite fingerprints every filename in /assets, so these can never go stale.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The entry point must not be cached, or a roster update stays invisible until
+# browsers expire the old HTML.
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate

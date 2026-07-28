@@ -1,0 +1,1449 @@
+{
+  "generatedAt": "2026-07-28T12:37:18.060Z",
+  "source": "local-csv",
+  "members": [
+    {
+      "id": "505omatic",
+      "name": "505omatic",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Albuquerque",
+      "state": "NM",
+      "coords": {
+        "lat": 35.0844,
+        "lng": -106.6504
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Albuquerque",
+      "url": "https://www.instagram.com/505omatic/"
+    },
+    {
+      "id": "aging-in-america",
+      "name": "Aging in America",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "News and reporting on aging and older adults",
+      "url": "https://aginginamerica.news/"
+    },
+    {
+      "id": "ang-diaryo",
+      "name": "Ang Diaryo",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "News for the Filipino community",
+      "url": "https://angdiaryo.org/"
+    },
+    {
+      "id": "atlantic-city-focus",
+      "name": "Atlantic City Focus",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Atlantic City",
+      "state": "NJ",
+      "coords": {
+        "lat": 39.3643,
+        "lng": -74.4229
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Atlantic City",
+      "url": "https://www.atlanticcityfocus.com/"
+    },
+    {
+      "id": "barrenside",
+      "name": "Barrenside",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Glasgow",
+      "state": "KY",
+      "coords": {
+        "lat": 36.9959,
+        "lng": -85.9119
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Barren County",
+      "url": "https://barrenside.com/"
+    },
+    {
+      "id": "beaufort-journalism",
+      "name": "Beaufort Journalism",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Beaufort",
+      "state": "SC",
+      "coords": {
+        "lat": 32.4316,
+        "lng": -80.6698
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Beaufort",
+      "url": "https://www.thebeaufortblog.com/"
+    },
+    {
+      "id": "black-belt-news-network",
+      "name": "Black Belt News Network",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Selma",
+      "state": "AL",
+      "coords": {
+        "lat": 32.4074,
+        "lng": -87.0211
+      },
+      "coordSource": "sheet",
+      "description": "News for Alabama's Black Belt region",
+      "url": "https://www.blackbeltnewsnetwork.com/"
+    },
+    {
+      "id": "bottom-up-media",
+      "name": "Bottom Up Media",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://theunfortunatetruth.substack.com/"
+    },
+    {
+      "id": "caribbean-television-network",
+      "name": "Caribbean Television Network",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Brooklyn",
+      "state": "NY",
+      "coords": {
+        "lat": 40.6782,
+        "lng": -73.9442
+      },
+      "coordSource": "sheet",
+      "description": "News for the Caribbean diaspora",
+      "url": "https://ctninfo.com/"
+    },
+    {
+      "id": "climate-gendered",
+      "name": "Climate, Gendered",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Climate change reporting through a gender lens",
+      "url": "https://www.climategendered.com/"
+    },
+    {
+      "id": "coyote",
+      "name": "COYOTE",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.coyotemedia.org/"
+    },
+    {
+      "id": "crosswinds",
+      "name": "Crosswinds",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.crosswindsnews.net/"
+    },
+    {
+      "id": "eden-prairie-local-news",
+      "name": "Eden Prairie Local News",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Eden Prairie",
+      "state": "MN",
+      "coords": {
+        "lat": 44.8547,
+        "lng": -93.4708
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Eden Prairie",
+      "url": "https://www.eplocalnews.org/"
+    },
+    {
+      "id": "esta-es-la-cosa",
+      "name": "Esta Es La Cosa",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Spanish-language community news",
+      "url": "https://estaeslacosa.com/"
+    },
+    {
+      "id": "five-wards-media",
+      "name": "Five Wards Media",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Houston",
+      "state": "TX",
+      "coords": {
+        "lat": 29.7604,
+        "lng": -95.3698
+      },
+      "coordSource": "sheet",
+      "description": "Community news rooted in Houston's historic wards",
+      "url": "https://www.fivewardsmedia.com/"
+    },
+    {
+      "id": "four-points-press",
+      "name": "Four Points Press",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Austin",
+      "state": "TX",
+      "coords": {
+        "lat": 30.395,
+        "lng": -97.847
+      },
+      "coordSource": "sheet",
+      "description": "Community news for the Four Points area",
+      "url": "https://fourpointspress.com/"
+    },
+    {
+      "id": "future-tides",
+      "name": "Future Tides",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Seattle",
+      "state": "WA",
+      "coords": {
+        "lat": 47.6062,
+        "lng": -122.3321
+      },
+      "coordSource": "sheet",
+      "description": "Water access and maritime news for Puget Sound",
+      "url": "https://www.futuretides.org/"
+    },
+    {
+      "id": "health-nation",
+      "name": "Health Nation",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Health reporting",
+      "url": null
+    },
+    {
+      "id": "hola-cultura",
+      "name": "Hola Cultura",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Washington",
+      "state": "DC",
+      "coords": {
+        "lat": 38.9072,
+        "lng": -77.0369
+      },
+      "coordSource": "sheet",
+      "description": "Latino arts and culture in Washington DC",
+      "url": "https://holacultura.com/"
+    },
+    {
+      "id": "juri-see",
+      "name": "Juri•See",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Courts and legal system coverage",
+      "url": "https://www.jurisee.com/"
+    },
+    {
+      "id": "kaheawai-media",
+      "name": "Kaheāwai Media",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Honolulu",
+      "state": "HI",
+      "coords": {
+        "lat": 21.3069,
+        "lng": -157.8583
+      },
+      "coordSource": "sheet",
+      "description": "Native Hawaiian community news",
+      "url": "https://kaheawaimedia.com/"
+    },
+    {
+      "id": "la-conner-community-news",
+      "name": "La Conner Community News",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "La Conner",
+      "state": "WA",
+      "coords": {
+        "lat": 48.3915,
+        "lng": -122.4974
+      },
+      "coordSource": "sheet",
+      "description": "Community news for La Conner",
+      "url": "https://laconnercommunitynews.org/"
+    },
+    {
+      "id": "la-verne-daily-news",
+      "name": "La Verne Daily News",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "La Verne",
+      "state": "CA",
+      "coords": {
+        "lat": 34.1008,
+        "lng": -117.7678
+      },
+      "coordSource": "sheet",
+      "description": "Community news for La Verne",
+      "url": "https://lavernedaily.substack.com/"
+    },
+    {
+      "id": "mahalaya",
+      "name": "Mahalaya",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Chicago",
+      "state": "IL",
+      "coords": {
+        "lat": 41.8781,
+        "lng": -87.6298
+      },
+      "coordSource": "sheet",
+      "description": "Filipino American community news and zines",
+      "url": "https://www.tinynewsco.org/print-makes-a-comeback-community-zines-are-part-of-tnc-founders-product-mix/"
+    },
+    {
+      "id": "margins-to-mainstream",
+      "name": "Margins to Mainstream",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": null
+    },
+    {
+      "id": "mat-su-sentinel",
+      "name": "Mat-Su Sentinel",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Wasilla",
+      "state": "AK",
+      "coords": {
+        "lat": 61.5814,
+        "lng": -149.4394
+      },
+      "coordSource": "sheet",
+      "description": "News for the Matanuska-Susitna Borough",
+      "url": "https://www.matsusentinel.com/"
+    },
+    {
+      "id": "miami-affordable-magazine",
+      "name": "Miami Affordable Magazine",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Miami",
+      "state": "FL",
+      "coords": {
+        "lat": 25.7617,
+        "lng": -80.1918
+      },
+      "coordSource": "sheet",
+      "description": "Affordability and housing news for Miami",
+      "url": "https://www.miaaffordablemagazine.org/"
+    },
+    {
+      "id": "news-relay-network",
+      "name": "News Relay Network",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://newsrelaynetwork.org/"
+    },
+    {
+      "id": "organ-mountain-news",
+      "name": "Organ Mountain News",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Las Cruces",
+      "state": "NM",
+      "coords": {
+        "lat": 32.3199,
+        "lng": -106.7637
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Las Cruces",
+      "url": "https://www.organmountainnews.com/"
+    },
+    {
+      "id": "ottawa-news-network",
+      "name": "Ottawa News Network",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Ottawa",
+      "state": "IL",
+      "coords": {
+        "lat": 41.3456,
+        "lng": -88.8426
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Ottawa",
+      "url": "https://www.ottawanewsnetwork.org/"
+    },
+    {
+      "id": "petaluma-voice",
+      "name": "Petaluma Voice",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Petaluma",
+      "state": "CA",
+      "coords": {
+        "lat": 38.2324,
+        "lng": -122.6367
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Petaluma",
+      "url": "https://petaluma-voice.monkeypod.io/give/support-petaluma-voice"
+    },
+    {
+      "id": "philly-afghan-info-hub",
+      "name": "Philly-Afghan Info Hub",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Philadelphia",
+      "state": "PA",
+      "coords": {
+        "lat": 39.9526,
+        "lng": -75.1652
+      },
+      "coordSource": "sheet",
+      "description": "News and information for Philadelphia's Afghan community",
+      "url": "https://www.phillyafghaninfohub.org/"
+    },
+    {
+      "id": "pittsburgh-manifold",
+      "name": "Pittsburgh Manifold",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Pittsburgh",
+      "state": "PA",
+      "coords": {
+        "lat": 40.4406,
+        "lng": -79.9959
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Pittsburgh",
+      "url": "https://www.pittsburghmanifold.com/"
+    },
+    {
+      "id": "planeta-venus",
+      "name": "Planeta Venus",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Sacramento",
+      "state": "CA",
+      "coords": {
+        "lat": 38.5816,
+        "lng": -121.4944
+      },
+      "coordSource": "sheet",
+      "description": "Spanish-language community news",
+      "url": "https://www.planetavenus.online/"
+    },
+    {
+      "id": "prior-lake-news-compass",
+      "name": "Prior Lake News Compass",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Prior Lake",
+      "state": "MN",
+      "coords": {
+        "lat": 44.7133,
+        "lng": -93.4227
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Prior Lake",
+      "url": "https://plnewscompass.org/"
+    },
+    {
+      "id": "queer-trans-wealth",
+      "name": "Queer & Trans Wealth",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Personal finance for queer and trans communities",
+      "url": "https://www.queerandtranswealth.org/"
+    },
+    {
+      "id": "roseville-reader",
+      "name": "Roseville Reader",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Roseville",
+      "state": "MN",
+      "coords": {
+        "lat": 45.0061,
+        "lng": -93.1566
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Roseville",
+      "url": "https://www.rosevillereader.com/"
+    },
+    {
+      "id": "san-pedro-gazette",
+      "name": "San Pedro Gazette",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "San Pedro",
+      "state": "CA",
+      "coords": {
+        "lat": 33.7361,
+        "lng": -118.2922
+      },
+      "coordSource": "sheet",
+      "description": "Community news for San Pedro",
+      "url": "https://sanpedrogazette.com/"
+    },
+    {
+      "id": "scene-in-boston",
+      "name": "Scene in Boston",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Boston",
+      "state": "MA",
+      "coords": {
+        "lat": 42.3601,
+        "lng": -71.0589
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Boston",
+      "url": "https://www.sceneinboston.org/"
+    },
+    {
+      "id": "spotlight-schools",
+      "name": "Spotlight Schools",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Los Alamitos",
+      "state": "CA",
+      "coords": {
+        "lat": 33.8031,
+        "lng": -118.0726
+      },
+      "coordSource": "sheet",
+      "description": "Education news for local schools",
+      "url": "https://www.spotlightschools.com/"
+    },
+    {
+      "id": "sprawlism",
+      "name": "Sprawlism",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Houston",
+      "state": "TX",
+      "coords": {
+        "lat": 29.75,
+        "lng": -95.36
+      },
+      "coordSource": "sheet",
+      "description": "Urbanism and development news",
+      "url": "https://www.sprawlism.com/"
+    },
+    {
+      "id": "synonym-magazine",
+      "name": "Synonym Magazine",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.synonym-mag.com/"
+    },
+    {
+      "id": "tayo",
+      "name": "Tayo",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Help and information for the Filipino diaspora",
+      "url": "https://www.tayohelp.com/"
+    },
+    {
+      "id": "the-51st",
+      "name": "The 51st",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Washington",
+      "state": "DC",
+      "coords": {
+        "lat": 38.91,
+        "lng": -77.025
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Washington DC",
+      "url": "https://51st.news/"
+    },
+    {
+      "id": "the-carrborean",
+      "name": "The Carrborean",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Carrboro",
+      "state": "NC",
+      "coords": {
+        "lat": 35.9101,
+        "lng": -79.0753
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Carrboro",
+      "url": "https://www.thecarrborean.com/"
+    },
+    {
+      "id": "the-edge",
+      "name": "The Edge",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Berea",
+      "state": "KY",
+      "coords": {
+        "lat": 37.5687,
+        "lng": -84.2963
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Berea",
+      "url": "https://theedgebereaky.com/"
+    },
+    {
+      "id": "the-la-reporter",
+      "name": "The LA Reporter",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Los Angeles",
+      "state": "CA",
+      "coords": {
+        "lat": 34.0522,
+        "lng": -118.2437
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Los Angeles",
+      "url": "https://thelareporter.la/"
+    },
+    {
+      "id": "the-latino-newsletter",
+      "name": "The Latino Newsletter",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "National news for and about Latino communities",
+      "url": "https://thelatinonewsletter.org/"
+    },
+    {
+      "id": "the-leveler",
+      "name": "The Leveler",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.thelevelernews.com/"
+    },
+    {
+      "id": "the-lighthouse",
+      "name": "The Lighthouse",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "New York",
+      "state": "NY",
+      "coords": {
+        "lat": 40.7128,
+        "lng": -74.006
+      },
+      "coordSource": "sheet",
+      "description": "Community news for New York City",
+      "url": "https://thelighthousenyc.org/"
+    },
+    {
+      "id": "the-neighborly",
+      "name": "The Neighborly",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Wytheville",
+      "state": "VA",
+      "coords": {
+        "lat": 36.9485,
+        "lng": -81.0848
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Southwest Virginia",
+      "url": "https://www.swvacountry.com/"
+    },
+    {
+      "id": "the-optimist",
+      "name": "The Optimist",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Minneapolis",
+      "state": "MN",
+      "coords": {
+        "lat": 45.026,
+        "lng": -93.3
+      },
+      "coordSource": "sheet",
+      "description": "Community news for North Minneapolis",
+      "url": "http://theoptimist.mn/"
+    },
+    {
+      "id": "the-oxford-free-press",
+      "name": "The Oxford Free Press",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Oxford",
+      "state": "OH",
+      "coords": {
+        "lat": 39.507,
+        "lng": -84.7452
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Oxford",
+      "url": "https://www.oxfreepress.com/"
+    },
+    {
+      "id": "the-school-of-us",
+      "name": "The School of US",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Education reporting",
+      "url": null
+    },
+    {
+      "id": "the-shout",
+      "name": "The SHOUT",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Wichita",
+      "state": "KS",
+      "coords": {
+        "lat": 37.6872,
+        "lng": -97.3301
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Wichita",
+      "url": "https://www.shoutwichita.com/"
+    },
+    {
+      "id": "the-southlander",
+      "name": "The Southlander",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Harvey",
+      "state": "IL",
+      "coords": {
+        "lat": 41.55,
+        "lng": -87.65
+      },
+      "coordSource": "sheet",
+      "description": "News for the Chicago Southland",
+      "url": "https://thesouthlander.com/"
+    },
+    {
+      "id": "the-vp-chicago",
+      "name": "The VP Chicago",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Chicago",
+      "state": "IL",
+      "coords": {
+        "lat": 41.87,
+        "lng": -87.65
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Chicago",
+      "url": "https://www.thevpchicago.org/"
+    },
+    {
+      "id": "tmbp-media",
+      "name": "TMBP Media",
+      "tier": "Publisher",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Higher education and Black professional life",
+      "url": "https://www.themillennialblackprofessor.com/"
+    },
+    {
+      "id": "tucker-county-observer",
+      "name": "Tucker County Observer",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Parsons",
+      "state": "WV",
+      "coords": {
+        "lat": 39.0962,
+        "lng": -79.6809
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Tucker County",
+      "url": "https://www.linkedin.com/in/thomas-yocum-803b2b93/"
+    },
+    {
+      "id": "tucson-spotlight",
+      "name": "Tucson Spotlight",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Tucson",
+      "state": "AZ",
+      "coords": {
+        "lat": 32.2226,
+        "lng": -110.9747
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Tucson",
+      "url": "https://www.tucsonspotlight.org/"
+    },
+    {
+      "id": "uplands-uplifting-news",
+      "name": "Uplands-Uplifting News",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Upland",
+      "state": "CA",
+      "coords": {
+        "lat": 34.0975,
+        "lng": -117.6484
+      },
+      "coordSource": "sheet",
+      "description": "Community news for the Uplands",
+      "url": "https://www.uplandsupliftingnews.com/"
+    },
+    {
+      "id": "wbr-independent",
+      "name": "WBR Independent",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Port Allen",
+      "state": "LA",
+      "coords": {
+        "lat": 30.4524,
+        "lng": -91.2101
+      },
+      "coordSource": "sheet",
+      "description": "Community news for West Baton Rouge Parish",
+      "url": "https://wbrindependent.com/"
+    },
+    {
+      "id": "whittier-informed",
+      "name": "Whittier Informed",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Whittier",
+      "state": "CA",
+      "coords": {
+        "lat": 33.9792,
+        "lng": -118.0328
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Whittier",
+      "url": null
+    },
+    {
+      "id": "witness-pa",
+      "name": "Witness PA",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": null,
+      "state": "PA",
+      "coords": null,
+      "coordSource": null,
+      "description": "News for Pennsylvania communities",
+      "url": null
+    },
+    {
+      "id": "woodbury-news-net",
+      "name": "Woodbury News Net",
+      "tier": "Publisher",
+      "kind": "place",
+      "city": "Woodbury",
+      "state": "MN",
+      "coords": {
+        "lat": 44.9239,
+        "lng": -92.9594
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Woodbury",
+      "url": "https://woodburynewsnet.org/"
+    },
+    {
+      "id": "austin-vida",
+      "name": "Austin Vida",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Austin",
+      "state": "TX",
+      "coords": {
+        "lat": 30.2672,
+        "lng": -97.7431
+      },
+      "coordSource": "sheet",
+      "description": "Latino arts and culture in Austin",
+      "url": "https://www.austinvida.com/"
+    },
+    {
+      "id": "autonomy-news",
+      "name": "Autonomy News",
+      "tier": "Community",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Disability news and reporting",
+      "url": "https://www.autonomynews.co/"
+    },
+    {
+      "id": "black-by-god",
+      "name": "Black by God",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Charleston",
+      "state": "WV",
+      "coords": {
+        "lat": 38.3498,
+        "lng": -81.6326
+      },
+      "coordSource": "sheet",
+      "description": "News by and for Black West Virginians",
+      "url": "https://blackbygod.org/"
+    },
+    {
+      "id": "carver-county-local-news",
+      "name": "Carver County Local News",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Chaska",
+      "state": "MN",
+      "coords": {
+        "lat": 44.7894,
+        "lng": -93.6022
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Carver County",
+      "url": "https://cclocalnews.org/"
+    },
+    {
+      "id": "community-voices",
+      "name": "Community Voices",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": "VA",
+      "coords": null,
+      "coordSource": null,
+      "description": "Community news for Virginia",
+      "url": "https://www.communityvoicesva.org/"
+    },
+    {
+      "id": "connect-puerto-rico",
+      "name": "Connect Puerto Rico",
+      "tier": "Community",
+      "kind": "place",
+      "city": "San Juan",
+      "state": "PR",
+      "coords": {
+        "lat": 18.4655,
+        "lng": -66.1057
+      },
+      "coordSource": "sheet",
+      "description": "News and information for Puerto Rico",
+      "url": "https://www.connect-puertorico.com/"
+    },
+    {
+      "id": "dark-roast-report",
+      "name": "Dark Roast Report",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://dark-roast-report.ghost.io/"
+    },
+    {
+      "id": "eshe",
+      "name": "eShe",
+      "tier": "Community",
+      "kind": "place",
+      "city": "New Delhi",
+      "state": null,
+      "coords": {
+        "lat": 28.6139,
+        "lng": 77.209
+      },
+      "coordSource": "sheet",
+      "description": "Women-led magazine published from India",
+      "url": "http://www.eshe.in/"
+    },
+    {
+      "id": "ethiopique",
+      "name": "Ethiopique",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "News for the Ethiopian diaspora",
+      "url": "https://ethiopique.com/"
+    },
+    {
+      "id": "harvey-world-herald",
+      "name": "Harvey World Herald",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Harvey",
+      "state": "IL",
+      "coords": {
+        "lat": 41.61,
+        "lng": -87.6467
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Harvey",
+      "url": "https://harveyworld.org/"
+    },
+    {
+      "id": "investigate-la",
+      "name": "Investigate LA",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Los Angeles",
+      "state": "CA",
+      "coords": {
+        "lat": 34.06,
+        "lng": -118.25
+      },
+      "coordSource": "sheet",
+      "description": "Investigative reporting for Los Angeles",
+      "url": "https://investigatela.org/"
+    },
+    {
+      "id": "lehigh-daily",
+      "name": "Lehigh Daily",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Allentown",
+      "state": "PA",
+      "coords": {
+        "lat": 40.6023,
+        "lng": -75.4714
+      },
+      "coordSource": "sheet",
+      "description": "News for the Lehigh Valley",
+      "url": "https://lehighdaily.com/"
+    },
+    {
+      "id": "mendo-local",
+      "name": "Mendo Local",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Ukiah",
+      "state": "CA",
+      "coords": {
+        "lat": 39.1502,
+        "lng": -123.2078
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Mendocino County",
+      "url": "https://www.mendolocal.news/"
+    },
+    {
+      "id": "newsberg",
+      "name": "Newsberg",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Newberg",
+      "state": "OR",
+      "coords": {
+        "lat": 45.3001,
+        "lng": -122.9732
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Newberg",
+      "url": "https://newsberg.org/"
+    },
+    {
+      "id": "nuestro-estado",
+      "name": "Nuestro Estado",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Columbia",
+      "state": "SC",
+      "coords": {
+        "lat": 34.0007,
+        "lng": -81.0348
+      },
+      "coordSource": "sheet",
+      "description": "Spanish-language news for South Carolina",
+      "url": "https://nuestroestado.com/"
+    },
+    {
+      "id": "southpoint-access",
+      "name": "Southpoint Access",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://southpointaccess.news/"
+    },
+    {
+      "id": "stumptown-savings",
+      "name": "Stumptown Savings",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Portland",
+      "state": "OR",
+      "coords": {
+        "lat": 45.5152,
+        "lng": -122.6784
+      },
+      "coordSource": "sheet",
+      "description": "Deals and affordability news for Portland",
+      "url": "https://stumptownsavings.com/"
+    },
+    {
+      "id": "super-empty",
+      "name": "Super Empty",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Portland",
+      "state": "OR",
+      "coords": {
+        "lat": 45.52,
+        "lng": -122.67
+      },
+      "coordSource": "sheet",
+      "description": "Urbanism and city life coverage",
+      "url": "https://www.superempty.com/"
+    },
+    {
+      "id": "the-fact-effect",
+      "name": "The Fact Effect",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "http://www.thefacteffect.com/"
+    },
+    {
+      "id": "the-intersection-magazine",
+      "name": "The Intersection Magazine",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.theintersectionmag.com/"
+    },
+    {
+      "id": "the-parlor-magazine",
+      "name": "The Parlor Magazine",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://www.theparlormagazine.com/"
+    },
+    {
+      "id": "the-platia",
+      "name": "The Platia",
+      "tier": "Community",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": "https://theplatia.com/"
+    },
+    {
+      "id": "winston-salem-sentinel",
+      "name": "Winston Salem Sentinel",
+      "tier": "Community",
+      "kind": "place",
+      "city": "Winston-Salem",
+      "state": "NC",
+      "coords": {
+        "lat": 36.0999,
+        "lng": -80.2442
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Winston-Salem",
+      "url": null
+    },
+    {
+      "id": "2puntos-platform-vozcolectiva",
+      "name": "2Puntos Platform/VozColectiva",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Hartford",
+      "state": "CT",
+      "coords": {
+        "lat": 41.7658,
+        "lng": -72.6734
+      },
+      "coordSource": "sheet",
+      "description": "Spanish-language news and storytelling",
+      "url": "https://2puntosplatform.com/"
+    },
+    {
+      "id": "blck-press",
+      "name": "BLCK Press",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Minneapolis",
+      "state": "MN",
+      "coords": {
+        "lat": 44.9778,
+        "lng": -93.265
+      },
+      "coordSource": "sheet",
+      "description": "News by and for Black communities",
+      "url": "https://www.blckpress.com/"
+    },
+    {
+      "id": "borimas",
+      "name": "BoriMás",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "News for the Puerto Rican diaspora",
+      "url": "https://borimas.com/"
+    },
+    {
+      "id": "brunswick-bird-media",
+      "name": "Brunswick Bird Media",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Community news for Brunswick",
+      "url": "https://thebrunswickbird.com/"
+    },
+    {
+      "id": "d-n-sportscast",
+      "name": "D&N Sportscast",
+      "tier": "Alumni",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Sports coverage",
+      "url": null
+    },
+    {
+      "id": "estes-valley-voice",
+      "name": "Estes Valley Voice",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Estes Park",
+      "state": "CO",
+      "coords": {
+        "lat": 40.3772,
+        "lng": -105.5217
+      },
+      "coordSource": "sheet",
+      "description": "Community news for the Estes Valley",
+      "url": "https://estesvalleyvoice.com/"
+    },
+    {
+      "id": "get-involved-zuni",
+      "name": "Get Involved Zuni",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Zuni Pueblo",
+      "state": "NM",
+      "coords": {
+        "lat": 35.0717,
+        "lng": -108.8506
+      },
+      "coordSource": "sheet",
+      "description": "Civic news and engagement for Zuni Pueblo",
+      "url": "https://www.facebook.com/people/Get-Involved-Zuni/100063626340017/"
+    },
+    {
+      "id": "moodfuel",
+      "name": "Moodfuel",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "coords": {
+        "lat": 38.8339,
+        "lng": -104.8214
+      },
+      "coordSource": "sheet",
+      "description": "Mental health news for Colorado",
+      "url": "https://moodfuel.org/"
+    },
+    {
+      "id": "proof-media",
+      "name": "Proof Media",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": null,
+      "url": null
+    },
+    {
+      "id": "rascal-news",
+      "name": "Rascal News",
+      "tier": "Alumni",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Worker-owned tabletop games journalism",
+      "url": "https://www.rascal.news/"
+    },
+    {
+      "id": "san-angelo-news-journal",
+      "name": "San Angelo News Journal",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "San Angelo",
+      "state": "TX",
+      "coords": {
+        "lat": 31.4638,
+        "lng": -100.437
+      },
+      "coordSource": "sheet",
+      "description": "Community news for San Angelo",
+      "url": null
+    },
+    {
+      "id": "sipp-talk",
+      "name": "Sipp Talk",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Utica",
+      "state": "MS",
+      "coords": {
+        "lat": 32.1043,
+        "lng": -90.6204
+      },
+      "coordSource": "sheet",
+      "description": "Community storytelling in rural Mississippi",
+      "url": "https://sippculture.org/jasmine-williams/"
+    },
+    {
+      "id": "the-torch-of-montclair",
+      "name": "The Torch of Montclair",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Montclair",
+      "state": "NJ",
+      "coords": {
+        "lat": 40.8259,
+        "lng": -74.209
+      },
+      "coordSource": "sheet",
+      "description": "Community news for Montclair",
+      "url": "https://www.torchofmontclair.com/"
+    },
+    {
+      "id": "uplift-chronicles",
+      "name": "UpLift Chronicles",
+      "tier": "Alumni",
+      "kind": "place",
+      "city": "Albuquerque",
+      "state": "NM",
+      "coords": {
+        "lat": 35.0844,
+        "lng": -106.6504
+      },
+      "coordSource": "sheet",
+      "description": "Solutions news for New Mexico",
+      "url": "https://www.upliftnewmexico.org/"
+    },
+    {
+      "id": "ravenous",
+      "name": "Ravenous",
+      "tier": "Community",
+      "kind": "beat",
+      "city": null,
+      "state": null,
+      "coords": null,
+      "coordSource": null,
+      "description": "Worker-owned food and culture writing",
+      "url": null
+    }
+  ]
+}
