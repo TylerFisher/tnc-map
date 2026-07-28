@@ -143,14 +143,71 @@ body {
   background: #e4ded4;
 }
 
-/* Leaflet renders inside an aria-hidden figure; the roster is its accessible
-   equivalent. Nothing here is operable, so no control chrome exists. */
 .leaflet-container {
   font-family: var(--font-body);
   background: #e4ded4;
-  outline: none;
-  /* The figure must never swallow the page's scroll on touch. */
-  touch-action: auto !important;
+}
+
+.leaflet-container:focus-visible {
+  outline: var(--focus);
+  outline-offset: -2px;
+}
+
+/* Grab affordance only where dragging is actually enabled — it is off on
+   touch so a one-finger swipe still scrolls the host page. */
+.leaflet-container.leaflet-grab {
+  cursor: grab;
+}
+
+.leaflet-container.leaflet-drag-target {
+  cursor: grabbing;
+}
+
+/* ---- Map controls ---------------------------------------------------- */
+
+/* Brand-matched rather than Leaflet default: the controls sit on the evidence
+   and should read as part of this artifact, not as a widget dropped onto it. */
+.leaflet-bar {
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgb(27 29 67 / 18%);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background: var(--surface);
+  color: var(--ink);
+  border-bottom-color: var(--line);
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-family: var(--font-body);
+}
+
+.leaflet-bar a:hover {
+  background: var(--paper);
+}
+
+.map-reset__wrap[hidden] {
+  display: none;
+}
+
+.map-reset {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: none;
+  padding: 8px 11px;
+  min-height: 30px;
+  cursor: pointer;
+  display: block;
+}
+
+.map-reset:hover {
+  background: var(--paper);
 }
 
 .dot {

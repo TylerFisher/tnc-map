@@ -44,11 +44,21 @@ Three bands of declining scale and equal standing, inside a 900px column:
 3. **The substance.** All 103 members grouped by state, each a link, with a
    search field over names, descriptions, cities and states.
 
-**The map is an output, never an input.** Dragging, zooming, keyboard control
-and every Leaflet control are disabled, and the figure is `aria-hidden` with the
-roster as its accessible equivalent. Finding a newsroom is the search field's
-job. This is deliberate: a map that can be operated invites navigation, and
-navigating a map is a worse way to find a newsroom than typing three letters.
+**The map is explorable, but it is not how you find a newsroom.** Search and
+the roster do that. Navigation is therefore bounded rather than open — you can
+move around inside the network, but you cannot lose it:
+
+- Pan and zoom are clamped to the roster's own extent, and zooming out past the
+  opening frame is disabled.
+- A **Reset view** control appears once the view has moved, and only then.
+- Wheel zoom is off until the map is clicked. In an iframe, hijacking the wheel
+  means the host page stops scrolling under the cursor.
+- One-finger drag is off on touch, so a phone reader is never trapped in the
+  figure. Pinch still zooms and pans.
+- Dots are not tab stops. The map is one labelled, focusable element with
+  arrow-key panning; the roster carries every member for keyboard and
+  screen-reader users. It cannot be `aria-hidden` while focusable, so it is
+  labelled instead.
 
 ### Why "members served"
 

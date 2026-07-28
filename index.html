@@ -13,9 +13,10 @@
     <!--
       DIRECTION CONTRACT
 
-      THESIS: The network's scale is the argument. The map is evidence for it,
-      never a way to move through it. Refuses the store-locator arrangement
-      this category ships by default.
+      THESIS: The network's scale is the argument. The map is evidence you can
+      explore, bounded to the roster's own extent — but finding a newsroom is
+      the search field's job, not the map's. Refuses the store-locator
+      arrangement this category ships by default.
 
       OWN-WORLD: TNC sand ground, navy ink, gold reserved for the single live
       accent. Libre Baskerville carries stated figures and member names; Work
@@ -45,11 +46,18 @@
         <p class="claim__sub" id="claim-sub"></p>
       </header>
 
-      <!-- Band 2 — the evidence. A figure, not an application: no dragging,
-           no zoom, no controls, and hidden from assistive tech because the
-           roster below is its complete accessible equivalent. -->
+      <!-- Band 2 — the evidence. Explorable within bounds, but not the way to
+           find a newsroom. It cannot be aria-hidden while it is focusable, so
+           it is one labelled tab stop with arrow-key panning; the roster below
+           remains its complete accessible equivalent. -->
       <figure class="evidence">
-        <div class="evidence__map" id="map" aria-hidden="true"></div>
+        <div
+          class="evidence__map"
+          id="map"
+          role="application"
+          aria-label="Map of member newsroom locations. Pan with the arrow keys, zoom with plus and minus."
+          aria-describedby="map-caption"
+        ></div>
         <figcaption class="visually-hidden" id="map-caption"></figcaption>
       </figure>
 
