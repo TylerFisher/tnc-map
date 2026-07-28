@@ -1,49 +1,40 @@
 /* ==========================================================================
    Tiny News Collective member map
 
-   All brand values live in the custom properties below. Changing the palette
-   or typefaces should not require touching anything further down this file.
+   Three bands of declining scale and equal standing: claim, evidence,
+   substance. Brand values are the custom properties below; changing the
+   palette or typefaces should not require touching anything further down.
+
+   No transitions anywhere. The brief pins this surface as static.
    ========================================================================== */
 
 :root {
   /* ---- TNC brand ---- */
-  --brand-gold: rgb(243 196 98); /* #f3c462 */
-  --brand-navy: rgb(27 29 67); /* #1b1d43 */
-  --brand-sand: rgb(237 231 221); /* #ede7dd */
+  --brand-gold: rgb(243 196 98);
+  --brand-navy: rgb(27 29 67);
+  --brand-sand: rgb(237 231 221);
 
-  /* ---- Derived surface palette ---- */
+  /* ---- Derived ---- */
   --ink: var(--brand-navy);
   --paper: var(--brand-sand);
-  /* Warm white rather than pure white, so cards lift off sand without going cold. */
   --surface: #fffdf9;
   --line: #d5ccbd;
-  /* Navy desaturated to a readable secondary. 4.5:1+ on both paper and surface. */
+  /* Navy desaturated. 5.5:1 on paper, 6.7:1 on surface. */
   --muted: #55587a;
+  /* The dot field. Slightly lifted off pure navy so overlaps read as density
+     rather than as one solid mass. */
+  --dot: rgb(27 29 67 / 88%);
 
-  /* ---- Tier colours ----
-     Publisher is the brand navy, Community the brand gold, Alumni a faded
-     navy — the tiers stay inside the brand palette rather than importing
-     three unrelated hues. Alumni additionally renders hollow on the map,
-     which is what actually distinguishes it for anyone who cannot rely on
-     colour alone. */
-  --tier-Publisher: var(--brand-navy);
-  --tier-Community: var(--brand-gold);
-  --tier-Alumni: #5c5f85;
-
-  /* Gold is far too light to carry white text; navy on gold clears 7:1. */
-  --badge-fg-Publisher: #fffdf9;
-  --badge-fg-Community: var(--brand-navy);
-  --badge-fg-Alumni: #fffdf9;
-
-  /* ---- Typography ---- */
   --font-heading: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
   --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* ---- Metrics ---- */
-  --sidebar-width: 300px;
-  /* Only consulted in auto-height mode; otherwise the map fills the frame. */
-  --map-height: 520px;
-  --radius: 8px;
+  /* Band heights inside the pinned ~1000px envelope. The roster takes what
+     is left, so a taller frame grows the list rather than the chrome. */
+  --map-height: 340px;
+  /* The Ghost content well this is embedded into. */
+  --well: 900px;
+
+  --radius: 6px;
   --focus: 2px solid var(--brand-navy);
 }
 
@@ -65,11 +56,9 @@ body {
 
 body {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 15px;
   background: var(--paper);
   color: var(--ink);
-  display: flex;
-  flex-direction: column;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -79,474 +68,349 @@ body {
   outline-offset: 2px;
 }
 
-/* ---------- Header ---------------------------------------------------- */
-
-.header {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  padding: 15px 18px 13px;
-  background: var(--paper);
-  border-bottom: 1px solid var(--line);
-  flex: none;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-.header__title {
+/* The surface is a column with one flexible band. `min-height: 0` on the
+   flexible child is what stops the roster overflowing its track — the defect
+   that put the old footnote on top of the member list at every stacked size.
+
+   Capped at the host's content-well width and centred, so the standalone page
+   and the Ghost embed are the same composition rather than two layouts that
+   have to be checked separately. */
+.surface {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  max-width: var(--well);
+  margin-inline: auto;
+}
+
+/* ---------- Band 1 — the claim ---------------------------------------- */
+
+.claim {
+  flex: none;
+  padding: clamp(20px, 3.2vw, 34px) clamp(18px, 3vw, 32px) clamp(16px, 2.4vw, 24px);
+}
+
+.claim__figure {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 18px;
-  line-height: 1.25;
-  letter-spacing: -0.005em;
-  margin-right: auto;
+  font-size: clamp(26px, 4.4vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 32ch;
 }
 
-.header__summary {
-  font-size: 12.5px;
+/* The second figure sits on its own line at the same scale AND the same ink —
+   two stated facts, not a headline plus a caption. Muting it here would
+   demote half the claim to a subtitle. */
+.claim__figure .claim__second {
+  display: block;
+}
+
+.claim__sub {
+  margin-top: clamp(10px, 1.4vw, 16px);
+  font-size: 13.5px;
+  line-height: 1.5;
   color: var(--muted);
-  width: 100%;
-  order: 3;
-  min-height: 1em;
-  line-height: 1.4;
+  max-width: 62ch;
 }
 
-.filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+/* ---------- Band 2 — the evidence ------------------------------------- */
 
-.pill {
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  font-weight: 500;
-  border: 1.5px solid var(--line);
-  background: var(--surface);
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 5px 8px 5px 9px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition:
-    border-color 0.15s,
-    color 0.15s,
-    opacity 0.15s;
-}
-
-.pill__dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+.evidence {
   flex: none;
-  background: var(--tier-color);
-  border: 2px solid var(--tier-color);
+  position: relative;
+  height: var(--map-height);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
-.pill__count {
-  font-variant-numeric: tabular-nums;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
-  background: var(--paper);
-  border-radius: 999px;
-  padding: 1px 6px;
-}
-
-.pill[data-tier='Publisher'] {
-  --tier-color: var(--tier-Publisher);
-}
-.pill[data-tier='Community'] {
-  --tier-color: var(--tier-Community);
-}
-.pill[data-tier='Alumni'] {
-  --tier-color: var(--tier-Alumni);
-}
-
-/* Alumni reads as "past member": hollow dot on the pill, hollow pin on the map. */
-.pill[data-tier='Alumni'] .pill__dot {
-  background: var(--surface);
-}
-
-.pill[aria-pressed='true'] {
-  border-color: var(--tier-color);
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.pill[aria-pressed='false'] {
-  opacity: 0.45;
-}
-
-/* ---------- Layout ---------------------------------------------------- */
-
-.layout {
-  flex: 1;
-  display: flex;
-  min-height: 0;
-}
-
-.map {
-  flex: 1;
-  min-height: 0;
-  /* Sand-tinted so the loading state matches the brand rather than flashing grey. */
+.evidence__map {
+  height: 100%;
   background: #e4ded4;
 }
 
-.sidebar {
-  width: var(--sidebar-width);
-  flex: none;
-  background: var(--paper);
-  border-left: 1px solid var(--line);
-  overflow-y: auto;
-  padding: 16px;
+/* Leaflet renders inside an aria-hidden figure; the roster is its accessible
+   equivalent. Nothing here is operable, so no control chrome exists. */
+.leaflet-container {
+  font-family: var(--font-body);
+  background: #e4ded4;
+  outline: none;
+  /* The figure must never swallow the page's scroll on touch. */
+  touch-action: auto !important;
 }
 
-/* ---------- Sidebar groups -------------------------------------------- */
+.dot {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--dot);
+  border: 1.5px solid var(--surface);
+  box-shadow: 0 1px 3px rgb(27 29 67 / 30%);
+}
 
-.group + .group {
-  margin-top: 22px;
-  padding-top: 18px;
+/* Hovering a dot is the map reflecting the roster, not a control. Gold is
+   spent here and in the matching roster row, nowhere else. */
+.dot.is-lit {
+  background: var(--brand-gold);
+  border-color: var(--brand-navy);
+  box-shadow: 0 1px 4px rgb(27 29 67 / 45%);
+  width: 15px;
+  height: 15px;
+  margin: -2px 0 0 -2px;
+}
+
+/* Dimmed rather than removed when a search is active: the shape of the whole
+   network stays visible behind the result, so filtering never makes the
+   network look smaller than it is. */
+.dot.is-muted {
+  background: rgb(27 29 67 / 15%);
+  border-color: rgb(255 253 249 / 60%);
+  box-shadow: none;
+}
+
+/* ---------- Band 3 — the substance ------------------------------------ */
+
+.roster {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px clamp(18px, 3vw, 32px) 0;
+}
+
+.roster__controls {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.roster__search {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  height: 44px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 24rem;
+}
+
+.roster__search::placeholder {
+  color: var(--muted);
+}
+
+.roster__search:hover {
+  border-color: var(--muted);
+}
+
+.roster__count {
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  flex: none;
+}
+
+/* The surface's only scroll region. A search field above a scrolling result
+   list is a pattern people already know how to read. */
+.roster__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  /* Explicit, because `overflow-y: auto` alone would compute the x axis to
+     `auto` and let any stray horizontal bleed become a scrollbar. */
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-bottom: 8px;
+  /* Fades the last rows rather than guillotining them, so the list reads as
+     continuing instead of ending. An affordance, not an ornament. */
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent);
+}
+
+.is-autoheight .roster__scroll {
+  mask-image: none;
+}
+
+/* State groups in a register layout: the place name holds a left rail and its
+   newsrooms sit beside it. This makes "29 states and territories" something
+   the reader can verify by scrolling rather than a figure they have to accept.
+   Sentence case, not a tracked uppercase eyebrow — 29 of those would be a
+   grammar nobody chose. */
+.state {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 0 clamp(14px, 2.2vw, 26px);
+  padding: 6px 0;
   border-top: 1px solid var(--line);
 }
 
-.group__title {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 1.3;
-  color: var(--ink);
+.state:first-child {
+  border-top: none;
+  padding-top: 2px;
 }
 
-.group__count {
+.state__name {
   font-family: var(--font-body);
-  font-variant-numeric: tabular-nums;
+  font-size: 12.5px;
   font-weight: 600;
-  background: var(--line);
-  color: var(--ink);
-  border-radius: 999px;
-  padding: 1px 7px;
-  font-size: 10.5px;
-}
-
-.group__blurb {
-  font-size: 12px;
+  line-height: 1.4;
   color: var(--muted);
-  margin: 6px 0 12px;
-  line-height: 1.45;
+  padding-top: 4px;
+  text-wrap: balance;
 }
 
-.cards {
+/* One column, full track width. Two columns looked denser and was not: at
+   ~325px each, almost every "Name — description" wrapped to two lines while
+   single-member states left the second column empty. At full width most
+   entries fit on one line. */
+.state__list {
   list-style: none;
 }
 
-.card {
-  border: 1px solid var(--line);
+/* No negative margins here. `.roster__scroll` sets `overflow-y: auto`, which
+   promotes the other axis from `visible` to `auto`, so anything bleeding past
+   the grid track becomes a real horizontal scrollbar on the list. A -8px
+   inline margin for a wider highlight cost exactly that. The highlight gets
+   its room from padding instead, which stays inside the track. */
+.roster__item {
+  padding: 4px 8px 5px;
   border-radius: var(--radius);
-  padding: 11px 12px;
-  margin-bottom: 8px;
-  background: var(--surface);
+  line-height: 1.38;
 }
 
-.card__name {
+.roster__item.is-lit {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.roster__name {
   font-family: var(--font-heading);
   font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+a.roster__name:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+/* The em dash lives in the text node, not in a ::before — see roster.ts. */
+.roster__desc {
   font-size: 13px;
-  line-height: 1.35;
-  color: var(--ink);
-  text-decoration: none;
-  display: inline-block;
-}
-
-a.card__name:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.card__hint {
-  font-size: 11.5px;
   color: var(--muted);
-  font-weight: 600;
-  margin-top: 3px;
 }
 
-.card__desc {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 4px;
-  line-height: 1.45;
-}
-
-.sidebar__empty {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-/* ---------- Badges ---------------------------------------------------- */
-
-.badge {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  border-radius: 4px;
-  padding: 2px 6px;
-  margin-top: 8px;
-}
-
-.badge--Publisher {
-  background: var(--tier-Publisher);
-  color: var(--badge-fg-Publisher);
-}
-.badge--Community {
-  background: var(--tier-Community);
-  color: var(--badge-fg-Community);
-}
-.badge--Alumni {
-  background: var(--tier-Alumni);
-  color: var(--badge-fg-Alumni);
-}
-
-/* ---------- Map markers ----------------------------------------------- */
-
-.pin {
-  display: block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border: 2.5px solid #fff;
-  box-shadow: 0 1px 4px rgb(27 29 67 / 40%);
-}
-
-.pin--Publisher {
-  background: var(--tier-Publisher);
-}
-
-/* Gold is light enough to disappear against pale basemap tiles, so it gets a
-   navy halo in addition to the white ring every pin carries. */
-.pin--Community {
-  background: var(--tier-Community);
-  box-shadow:
-    0 0 0 1.5px rgb(27 29 67 / 45%),
-    0 1px 4px rgb(27 29 67 / 35%);
-}
-
-.pin--Alumni {
-  background: var(--surface);
-  border-color: var(--tier-Alumni);
-  box-shadow:
-    0 0 0 1.5px var(--tier-Alumni),
-    0 1px 4px rgb(27 29 67 / 25%);
-}
-
-.leaflet-marker-icon:focus-visible .pin {
-  outline: var(--focus);
-  outline-offset: 3px;
-}
-
-.cluster {
-  width: 32px;
-  height: 32px;
-  background: var(--brand-navy);
-  color: var(--surface);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  border: 2.5px solid #fff;
-  box-shadow: 0 1px 5px rgb(27 29 67 / 35%);
-}
-
-/* ---------- Popups ---------------------------------------------------- */
-
-.leaflet-popup-content-wrapper {
-  border-radius: var(--radius);
-  font-family: var(--font-body);
-  background: var(--surface);
-  color: var(--ink);
-}
-
-.leaflet-popup-tip {
-  background: var(--surface);
-}
-
-.leaflet-popup-content {
-  margin: 13px 15px;
-  line-height: 1.45;
-}
-
-.popup__name {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 1.3;
-  color: var(--ink);
-  text-decoration: none;
-  display: inline-block;
-}
-
-a.popup__name:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.popup__loc {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 3px;
-}
-
-.popup__desc {
+.roster__place {
   font-size: 12.5px;
-  margin-top: 7px;
-  line-height: 1.45;
+  color: var(--muted);
 }
 
-/* ---------- Map controls ---------------------------------------------- */
-
-.fit-all[hidden] {
-  display: none;
+.roster__empty {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 18px 0;
+  max-width: 52ch;
 }
 
-.fit-all__button {
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+.roster__clear {
+  font: inherit;
+  font-size: 14px;
   color: var(--ink);
-  background: var(--surface);
+  background: none;
   border: none;
-  padding: 7px 9px;
+  border-bottom: 1px solid var(--muted);
+  padding: 0 0 1px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
-.fit-all__button:hover {
-  background: var(--paper);
-}
+/* ---------- Credit ----------------------------------------------------- */
 
-/* The count is the honest part: it says how many members are off-screen. */
-.fit-all__count {
-  font-variant-numeric: tabular-nums;
-  font-size: 10px;
-  font-weight: 600;
-  background: var(--brand-gold);
-  color: var(--brand-navy);
-  border-radius: 999px;
-  padding: 1px 6px;
-}
-
-.leaflet-bar a,
-.leaflet-control-zoom a {
-  color: var(--ink);
-  background: var(--surface);
-}
-
-.leaflet-container {
-  font-family: var(--font-body);
-}
-
-/* ---------- Footer ---------------------------------------------------- */
-
-.footnote {
+.credit {
+  flex: none;
   font-size: 11px;
   color: var(--muted);
-  padding: 8px 18px;
-  background: var(--paper);
-  border-top: 1px solid var(--line);
-  flex: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  padding: 8px clamp(18px, 3vw, 32px) 10px;
 }
 
-.footnote__sep {
-  opacity: 0.5;
+.credit a {
+  color: inherit;
 }
 
-/* ---------- Embed modes ----------------------------------------------- */
+/* ---------- Embed modes ------------------------------------------------ */
 
-/* The host page supplies its own heading, so ours would be a duplicate. */
-.is-embedded .header__title {
-  display: none;
+/* The host page supplies the surrounding heading; the claim is this
+   artifact's own h1 and stays in both modes. Embedding only tightens
+   the chrome. */
+.is-embedded .claim {
+  padding-top: clamp(16px, 2.4vw, 26px);
 }
 
-.is-embedded .header {
-  padding: 11px 14px 10px;
-}
-
-.is-embedded .footnote {
-  padding: 7px 14px;
-}
-
-/* Content-driven height, for parents that resize the iframe from postMessage. */
 .is-autoheight,
 .is-autoheight body {
   height: auto;
 }
 
-.is-autoheight .layout {
-  flex: none;
+.is-autoheight .surface {
+  height: auto;
 }
 
-.is-autoheight .map {
-  height: var(--map-height);
-  flex: 1 1 60%;
-}
-
-.is-autoheight .sidebar {
+.is-autoheight .roster__scroll {
   overflow-y: visible;
   max-height: none;
 }
 
-/* ---------- Responsive ------------------------------------------------ */
+/* ---------- Responsive -------------------------------------------------- */
 
-@media (max-width: 760px) {
-  .layout {
-    flex-direction: column;
+/* Two columns need ~420px each before "Name — description" stops wrapping on
+   most rows; below that one column reads better than two ragged ones. */
+@media (max-width: 820px) {
+  .state {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px 0;
   }
 
-  .map {
-    min-height: 380px;
-    flex: 1 1 auto;
+  .state__name {
+    padding-top: 0;
   }
 
-  .sidebar {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--line);
-    max-height: 45vh;
-  }
-
-  .is-autoheight .sidebar {
-    max-height: none;
-  }
-
-  .header__title {
-    width: 100%;
-    margin-right: 0;
-  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+@media (max-width: 640px) {
+  :root {
+    --map-height: 300px;
+  }
+
+  .roster__controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .roster__search {
+    max-width: none;
+    flex-basis: 100%;
   }
 }
 
@@ -554,5 +418,6 @@ a.popup__name:hover {
   :root {
     --muted: #3c3f5e;
     --line: #a89e8c;
+    --dot: rgb(27 29 67);
   }
 }

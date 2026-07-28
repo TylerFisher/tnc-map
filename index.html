@@ -6,41 +6,86 @@
     <title>Tiny News Collective Member Map</title>
     <meta
       name="description"
-      content="An interactive map of Tiny News Collective member newsrooms across the United States and beyond."
+      content="103 member newsrooms served by the Tiny News Collective, across 29 states and territories."
     />
     <meta name="color-scheme" content="light" />
+
+    <!--
+      DIRECTION CONTRACT
+
+      THESIS: The network's scale is the argument. The map is evidence for it,
+      never a way to move through it. Refuses the store-locator arrangement
+      this category ships by default.
+
+      OWN-WORLD: TNC sand ground, navy ink, gold reserved for the single live
+      accent. Libre Baskerville carries stated figures and member names; Work
+      Sans carries everything operable. No cards, no tier badges, no
+      colour-coded membership taxonomy.
+
+      STORY: A program officer reads a claim, sees it distributed across the
+      country, then reads the roster that proves it — and can test the claim
+      by typing into it.
+
+      FIRST VIEWPORT: Claim at display scale on sand; beneath it a field of
+      navy dots at full 69-point density; beneath that, search and the
+      complete roster of all 103.
+
+      FORM: Figure-led stack. Candidate 3 of 6, seed key 3ef78d87. No staging
+      committed — the dealt staging was motion-based and eliminated by the
+      brief's no-animation constraint.
+    -->
   </head>
 
   <body>
-    <header class="header">
-      <h1 class="header__title">Our Member Network</h1>
+    <main class="surface">
+      <!-- Band 1 — the claim. Never reflects the search; it is the standing
+           argument, not a readout. -->
+      <header class="claim">
+        <h1 class="claim__figure" id="claim"></h1>
+        <p class="claim__sub" id="claim-sub"></p>
+      </header>
 
-      <div
-        class="filters"
-        id="filters"
-        role="group"
-        aria-label="Filter members by membership tier"
-      ></div>
+      <!-- Band 2 — the evidence. A figure, not an application: no dragging,
+           no zoom, no controls, and hidden from assistive tech because the
+           roster below is its complete accessible equivalent. -->
+      <figure class="evidence">
+        <div class="evidence__map" id="map" aria-hidden="true"></div>
+        <figcaption class="visually-hidden" id="map-caption"></figcaption>
+      </figure>
 
-      <p class="header__summary" id="summary" role="status"></p>
-    </header>
+      <!-- Band 3 — the substance. Every member, searchable, each one a link. -->
+      <section class="roster" aria-labelledby="roster-heading">
+        <h2 class="visually-hidden" id="roster-heading">All member newsrooms</h2>
 
-    <main class="layout">
-      <!-- `region`, not `application`: the pins are individually tab-reachable,
-           so there is no need to force screen readers out of browse mode. -->
-      <div class="map" id="map" role="region" aria-label="Map of member newsrooms"></div>
+        <div class="roster__controls">
+          <label class="visually-hidden" for="search">Search member newsrooms</label>
+          <input
+            class="roster__search"
+            id="search"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            enterkeyhint="search"
+            placeholder="Search newsrooms, places, coverage"
+          />
+          <p class="roster__count" id="count"></p>
+          <!-- Separate from the visible count so the number can update on every
+               keystroke while announcements stay debounced. -->
+          <p class="visually-hidden" id="count-live" role="status" aria-live="polite"></p>
+        </div>
 
-      <aside class="sidebar" aria-label="Members without a map location">
-        <div id="sidebar-content"></div>
-      </aside>
+        <div class="roster__scroll" id="roster-scroll" tabindex="0">
+          <div class="roster__list" id="roster"></div>
+          <p class="roster__empty" id="roster-empty" hidden></p>
+        </div>
+      </section>
+
+      <p class="credit" id="credit"></p>
     </main>
-
-    <footer class="footnote" id="footnote"></footer>
 
     <noscript>
       <p style="padding: 24px; font-family: sans-serif; font-size: 14px">
-        This map needs JavaScript to run. A full list of Tiny News Collective members is available
-        at
+        This map needs JavaScript. A full list of Tiny News Collective members is available at
         <a href="https://www.tinynewsco.org/">tinynewsco.org</a>.
       </p>
     </noscript>

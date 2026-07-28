@@ -2,133 +2,178 @@
  * TNC brand typefaces, self-hosted — no request to Google Fonts.
  *
  * Latin + Latin Extended, at only the weights the stylesheet uses.
- * `latin-ext` is not optional: member names include "Kaheāwai Media", whose ā
+ * `latin-ext` is not optional: "Kaheāwai Media" carries an ā (U+0101) that
  * lives outside the basic Latin subset and would otherwise fall back to a
- * system font mid-word.
+ * system font mid-word. It is the single glyph in the roster that needs it.
  */
-import '@fontsource/libre-baskerville/latin-400.css';
 import '@fontsource/libre-baskerville/latin-700.css';
-import '@fontsource/libre-baskerville/latin-ext-400.css';
 import '@fontsource/libre-baskerville/latin-ext-700.css';
 
 import '@fontsource/work-sans/latin-400.css';
 import '@fontsource/work-sans/latin-500.css';
-import '@fontsource/work-sans/latin-600.css';
 import '@fontsource/work-sans/latin-ext-400.css';
 import '@fontsource/work-sans/latin-ext-500.css';
-import '@fontsource/work-sans/latin-ext-600.css';
+
 import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
 import './styles.css';
 
 import { el, mustFind } from './dom.js';
-import { countStates, generatedAt, members, tierTotals, unplacedMembers } from './dataset.js';
+import { countStates, generatedAt, mappedMembers, members } from './dataset.js';
+import { buildIndex, search } from './search.js';
+import { createRoster } from './roster.js';
 import { createMap } from './map.js';
-import { renderSidebar } from './sidebar.js';
 import { announceReady, applyEmbedConfig, readEmbedConfig, startHeightReporting } from './embed.js';
-import { TIERS, placementOf, type Member, type Tier } from './types.js';
 
-const activeTiers = new Set<Tier>(TIERS);
+/** How long to wait before announcing a result count to screen readers. */
+const ANNOUNCE_DELAY_MS = 450;
 
 function main(): void {
   const config = readEmbedConfig();
   applyEmbedConfig(config);
 
-  const mapController = createMap(mustFind('#map'));
-  const sidebar = mustFind('#sidebar-content');
-  const summary = mustFind('#summary');
-  const footnote = mustFind('#footnote');
+  const searchInput = mustFind<HTMLInputElement>('#search');
+  const countEl = mustFind('#count');
+  const countLive = mustFind('#count-live');
+  const emptyEl = mustFind('#roster-empty');
+  const listEl = mustFind('#roster');
 
-  buildFilters(mustFind('#filters'), () => update(false));
+  writeClaim();
+  writeCredit();
 
-  function update(isFirstRender: boolean): void {
-    const visible = members.filter((m) => activeTiers.has(m.tier));
+  const index = buildIndex(members);
 
-    mapController.render(visible);
-    if (isFirstRender) mapController.fitToCore();
+  // One highlight state, driven from either side. Both controllers no-op when
+  // the id is unchanged, so a dot lighting its row cannot bounce back.
+  const setLit = (id: string | null): void => {
+    roster.light(id);
+    map.light(id);
+  };
 
-    renderSidebar(
-      sidebar,
-      visible.filter((m) => placementOf(m) === 'beat'),
-      visible.filter((m) => placementOf(m) === 'unplaced'),
-    );
+  const roster = createRoster(listEl, { onLight: setLit });
+  const map = createMap(mustFind('#map'), members, { onLight: setLit });
 
-    summary.textContent = summaryText(visible);
+  let announceTimer: number | undefined;
+
+  function apply(query: string): void {
+    const results = search(index, query);
+
+    roster.render(results);
+    map.reflect(new Set(results.map((m) => m.id)));
+
+    const trimmed = query.trim();
+    countEl.textContent = countLabel(results.length, trimmed);
+
+    const isEmpty = results.length === 0;
+    emptyEl.hidden = !isEmpty;
+    listEl.hidden = isEmpty;
+    if (isEmpty) writeEmptyState(emptyEl, trimmed, searchInput, apply);
+    else emptyEl.replaceChildren();
+
+    // The visible count updates on every keystroke; the announcement waits, so
+    // a screen reader is not read a new total for every character typed.
+    window.clearTimeout(announceTimer);
+    announceTimer = window.setTimeout(() => {
+      countLive.textContent = countLabel(results.length, trimmed);
+    }, ANNOUNCE_DELAY_MS);
   }
 
-  update(true);
-  footnote.replaceChildren(...footnoteNodes());
+  searchInput.addEventListener('input', () => apply(searchInput.value));
+  // Escape clears, which is what the browser's own search-input affordance
+  // implies and what people try first.
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && searchInput.value !== '') {
+      event.preventDefault();
+      searchInput.value = '';
+      apply('');
+    }
+  });
 
-  // The sidebar can change height as tiers are toggled, which moves the map.
-  new ResizeObserver(() => mapController.invalidate()).observe(mustFind('#map'));
+  apply('');
+
+  mustFind('#map-caption').textContent =
+    `Map showing the locations of ${mappedMembers.length} of the ${members.length} member ` +
+    `newsrooms across ${countStates(mappedMembers)} states and territories. ` +
+    `Every member, mapped or not, is listed below.`;
 
   startHeightReporting(config);
   announceReady();
-}
-
-function buildFilters(container: HTMLElement, onChange: () => void): void {
-  for (const tier of TIERS) {
-    const button = el(
-      'button',
-      {
-        type: 'button',
-        class: 'pill',
-        'data-tier': tier,
-        'aria-pressed': 'true',
-      },
-      [el('span', { class: 'pill__dot' }), tier, el('span', { class: 'pill__count', text: tierTotals[tier] })],
-    );
-
-    button.addEventListener('click', () => {
-      if (activeTiers.has(tier)) activeTiers.delete(tier);
-      else activeTiers.add(tier);
-      button.setAttribute('aria-pressed', String(activeTiers.has(tier)));
-      onChange();
-    });
-
-    container.append(button);
-  }
+  window.addEventListener('resize', () => map.invalidate());
 }
 
 /**
- * Every figure in this sentence is computed from the same filtered set.
- *
- * The original mixed scopes mid-sentence: tier counts came from the unfiltered
- * roster while the states figure came from the filtered pins, so switching a
- * tier off produced a line that contradicted itself.
+ * "Members served" rather than "members": the total includes 14 alumni, and
+ * TNC did serve all of them. This is the phrasing that makes the headline
+ * figure honest instead of inflated — see PRODUCT.md.
  */
-function summaryText(visible: readonly Member[]): string {
-  if (visible.length === 0) return 'No tiers selected — choose at least one above.';
+function writeClaim(): void {
+  const total = members.length;
+  const mapped = mappedMembers.length;
+  const states = countStates(mappedMembers);
 
-  const mapped = visible.filter((m) => m.coords !== null);
-  const offMap = visible.length - mapped.length;
-  const states = countStates(mapped);
+  mustFind('#claim').replaceChildren(
+    document.createTextNode(`${total} members served.`),
+    el('span', { class: 'claim__second', text: `${states} states and territories.` }),
+  );
 
-  const parts = [
-    visible.length === members.length
-      ? `${members.length} members`
-      : `${visible.length} of ${members.length} members`,
-    `${mapped.length} on the map across ${states} states and territories`,
-  ];
-  if (offMap > 0) parts.push(`${offMap} listed alongside`);
-
-  return parts.join(' · ');
+  mustFind('#claim-sub').textContent =
+    `${mapped} of them appear on the map. Every member is listed below.`;
 }
 
-function footnoteNodes(): Node[] {
-  const pending = unplacedMembers.length;
+function countLabel(shown: number, query: string): string {
+  if (query === '') return `${members.length} members`;
+  return `${shown} of ${members.length}`;
+}
+
+function writeEmptyState(
+  target: HTMLElement,
+  query: string,
+  input: HTMLInputElement,
+  apply: (query: string) => void,
+): void {
+  const clearButton = el('button', {
+    type: 'button',
+    class: 'roster__clear',
+    text: 'Clear search',
+  });
+  clearButton.addEventListener('click', () => {
+    input.value = '';
+    apply('');
+    input.focus();
+  });
+
+  // Names the problem and the recovery, in the product's own words.
+  target.replaceChildren(
+    document.createTextNode(`No members match “${query}”. Try a place, a state, or a subject — `),
+    clearButton,
+    document.createTextNode(' to see all 103.'),
+  );
+}
+
+/**
+ * Tile attribution. Leaflet's own control is disabled so no chrome floats over
+ * the evidence, which makes rendering it here a requirement rather than a
+ * nicety — CARTO and OpenStreetMap both require visible credit.
+ */
+function writeCredit(): void {
   const updated = generatedAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-  return [
-    el('span', {
-      text:
-        pending > 0
-          ? `${pending} members are listed without a pin while their locations are confirmed.`
-          : 'Every member is mapped.',
+  mustFind('#credit').replaceChildren(
+    document.createTextNode('Map data © '),
+    el('a', {
+      href: 'https://www.openstreetmap.org/copyright',
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      text: 'OpenStreetMap',
     }),
-    el('span', { class: 'footnote__sep', text: '·' }),
-    el('span', { text: `Roster updated ${updated}` }),
-  ];
+    document.createTextNode(' contributors, © '),
+    el('a', {
+      href: 'https://carto.com/attributions',
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      text: 'CARTO',
+    }),
+    document.createTextNode(`. Roster updated ${updated}.`),
+  );
 }
 
 // Vite injects this as a module, so the DOM is already parsed. The guard covers
@@ -142,8 +187,8 @@ if (document.readyState === 'loading') {
 // Surface failures in the UI instead of only the console — this page is
 // normally embedded, where nobody is watching devtools.
 window.addEventListener('error', (event) => {
-  const summary = document.querySelector('#summary');
-  if (summary && !summary.textContent) {
-    summary.textContent = `The map failed to load: ${event.message}`;
+  const claim = document.querySelector('#claim-sub');
+  if (claim && !claim.textContent) {
+    claim.textContent = `The map failed to load: ${event.message}`;
   }
 });

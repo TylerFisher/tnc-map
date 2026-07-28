@@ -1,12 +1,17 @@
 # Tiny News Collective member map
 
-An embeddable map of TNC member newsrooms. The roster is maintained in a Google
-Sheet; a sync script validates it, fills in missing coordinates, and writes a
-static JSON file that ships with the build.
+An embeddable artifact showing the reach of the TNC network: a stated claim, a
+map as evidence for it, and the full roster of every member newsroom, grouped
+by state and searchable.
 
-The live page has **no runtime dependency on Google**. If the Sheet is
-unpublished, renamed, or rate-limited, the map keeps working — the *build* is
-what breaks, loudly, in front of a developer.
+The roster is maintained in a Google Sheet; a sync script validates it, fills in
+missing coordinates, and writes a static JSON file that ships with the build.
+The live page has **no runtime dependency on Google** — if the Sheet is
+unpublished or renamed, the map keeps working and the *build* is what breaks,
+loudly, in front of a developer.
+
+Product truth lives in [PRODUCT.md](PRODUCT.md). Read it before changing what
+the surface argues.
 
 ---
 
@@ -16,8 +21,6 @@ what breaks, loudly, in front of a developer.
 npm install
 npm run dev      # http://localhost:5173
 ```
-
-Other commands:
 
 | Command | What it does |
 | --- | --- |
@@ -30,9 +33,34 @@ Other commands:
 
 ---
 
+## How the surface is composed
+
+Three bands of declining scale and equal standing, inside a 900px column:
+
+1. **The claim.** `103 members served. 29 states and territories.` at display
+   scale. It never changes in response to search — it is the standing argument,
+   not a readout.
+2. **The evidence.** Every mapped member as one dot. No clustering.
+3. **The substance.** All 103 members grouped by state, each a link, with a
+   search field over names, descriptions, cities and states.
+
+**The map is an output, never an input.** Dragging, zooming, keyboard control
+and every Leaflet control are disabled, and the figure is `aria-hidden` with the
+roster as its accessible equivalent. Finding a newsroom is the search field's
+job. This is deliberate: a map that can be operated invites navigation, and
+navigating a map is a worse way to find a newsroom than typing three letters.
+
+### Why "members served"
+
+The total includes 14 Alumni. TNC served all 103, so "members served" is the
+phrasing that keeps the headline figure honest rather than inflated. This is
+binding — see PRODUCT.md.
+
+---
+
 ## Updating the member list
 
-**Day to day, edit the Google Sheet.** Nothing else. Then a developer runs:
+**Day to day, edit the Google Sheet.** Then a developer runs:
 
 ```bash
 npm run sync
@@ -40,17 +68,9 @@ git commit -am "Update member roster"
 git push          # deploy is automatic
 ```
 
-`sync` prints a report before writing anything:
-
-```
-note     103 members: 69 mapped, 13 beat-based, 21 awaiting a location.
-WARNING  Witness PA: has state "PA" but no city, so it cannot be placed
-         precisely. Add a city to the Sheet and it will be mapped automatically.
-ERROR    Row 47 (Example News): tier "Publsher" is not one of: Publisher, Community, Alumni
-```
-
-Errors abort the sync and leave `data/members.json` untouched, so a typo in a
-spreadsheet can never take the live map down. Warnings are advisory.
+`sync` prints a report before writing anything, and errors abort it without
+touching `data/members.json`, so a typo in a spreadsheet can never take the live
+map down.
 
 ### Sheet columns
 
@@ -60,35 +80,48 @@ spreadsheet can never take the live map down. Warnings are advisory.
 | `tier` | ✅ | `Publisher`, `Community`, or `Alumni`. Case-insensitive |
 | `type` | | `place` (default) or `beat` |
 | `city` | | Fill this in and coordinates are looked up automatically |
-| `state` | | Two-letter code |
+| `state` | | Two-letter code. **Also what the roster groups by** |
 | `lat` / `lng` | | Optional. Overrides geocoding when present |
-| `description` | | One line, shown in the popup and the sidebar |
+| `description` | | One line. This is the most valuable column — see below |
 | `url` | | Must be `http(s)`. Anything else is rejected |
 | `status`, `notes` | | For humans. Ignored by the code |
 
 **You almost never need to fill in `lat`/`lng` by hand.** Type a city and state;
 the sync script geocodes it and caches the result. Coordinates you *do* enter
-are never overwritten — they are cross-checked against the city, and you get a
+are never overwritten — they are cross-checked against the city and you get a
 warning if they disagree by more than 60 km.
+
+**`description` is the column that does the persuading.** "News and information
+for Philadelphia's Afghan community" is the kind of detail no other organisation
+could truthfully claim about its network. It appears in the roster next to every
+name and is fully searchable. A member with no description still renders
+correctly — it just contributes nothing to the argument.
+
+**`state` matters even without coordinates.** Witness PA and Community Voices
+have a state but no city, so they cannot be mapped — but they still appear under
+Pennsylvania and Virginia in the roster. Filling in `state` is worth doing even
+when you don't know the city.
 
 ### Members with no location
 
-A `place` row with no coordinates is **not dropped**. It appears in the sidebar
-under "Not yet on the map", with whatever partial location is known. There are
-currently 21 of these, and only two of them (`Witness PA`, `Community Voices`)
-have any location hint at all — a state with no city.
+Nothing is dropped. Members without a state fall into two groups at the end of
+the roster:
+
+- **National & beat-based** — `type=beat`. These have no location by definition;
+  it is a fact about their journalism, not missing data.
+- **Location to be confirmed** — place-based newsrooms whose location TNC has
+  not recorded yet.
 
 State-only rows are deliberately **not** geocoded. A state centroid renders as a
 confident pin in the middle of Pennsylvania, which is worse than no pin: it
-looks like an answer. Add a city and it maps itself.
+looks like an answer.
 
 ---
 
 ## Deploying
 
-The build is a static directory. Any static host works; `netlify.toml` is
-included for Netlify, and `public/_headers` is read by both Netlify and
-Cloudflare Pages.
+Static output. Any host works; `netlify.toml` is included for Netlify, and
+`public/_headers` is read by both Netlify and Cloudflare Pages.
 
 ```
 Build command:      npm run build
@@ -96,20 +129,16 @@ Publish directory:  dist
 Node version:       22
 ```
 
-`npm run build` runs `tsc --noEmit` first, so a type error fails the deploy
-rather than shipping a broken map.
-
 ---
 
 ## Embedding in Ghost
 
-Ghost cannot host this app itself — it has no way to serve a static bundle. Host
-the build somewhere (Netlify, Cloudflare Pages, GitHub Pages) and embed it in an
-iframe.
+Ghost cannot host this app — it has no way to serve a static bundle. Host the
+build elsewhere and embed it in an iframe.
 
 ### 1. Allow Ghost to frame the map
 
-Open `public/_headers` and set `frame-ancestors` to the Ghost site's domain:
+In `public/_headers`, set `frame-ancestors` to the Ghost site's domain:
 
 ```
 /*
@@ -122,20 +151,20 @@ nothing but a console error to explain why.
 
 ### 2. Paste into a Ghost HTML card
 
-In the Ghost editor, type `/html` to insert an HTML card, then paste:
+Type `/html` in the Ghost editor, then paste:
 
 ```html
 <style>
   .tnc-map-embed {
     display: block;
     width: 100%;
-    height: 720px;
+    height: 1000px;
     border: 1px solid #d5ccbd;
     border-radius: 10px;
     background: #ede7dd;
   }
   @media (max-width: 760px) {
-    .tnc-map-embed { height: 640px; }
+    .tnc-map-embed { height: 880px; }
   }
 </style>
 
@@ -147,31 +176,28 @@ In the Ghost editor, type `/html` to insert an HTML card, then paste:
 ></iframe>
 ```
 
-Replace `YOUR-MAP-HOST` with the deployed URL. It must be **https** — a Ghost
-site on https will refuse to load an http iframe.
+Replace `YOUR-MAP-HOST` with the deployed URL. It must be **https**.
 
-`?embed=1` hides the map's own `<h1>`, on the assumption the Ghost post supplies
-the heading. Drop it if you want the map's title shown too.
+The surface is authored for a **900px content well**, which is what the TNC
+theme gives a post. It caps itself at that width and centres, so the standalone
+page and the embed are the same composition. If your theme's well is a different
+width, change `--well` in `src/styles.css` to match.
 
-### 3. Optional: make it wider than the post column
+### Query parameters
 
-Most Ghost themes constrain post content to roughly 720px. If your theme
-supports Koenig's width classes, wrap the iframe:
-
-```html
-<div class="kg-width-wide"> … </div>   <!-- or kg-width-full -->
-```
-
-This is theme-dependent — check how it looks before publishing.
+| Parameter | Effect |
+| --- | --- |
+| `embed=1` | Tightens the chrome for a host page that supplies its own surrounding heading |
+| `embed=0` | Forces the standalone layout even inside a frame |
+| `autoheight=1` | Grows to fit content and posts height to the parent |
+| `mapheight=340` | Overrides the evidence band's height in pixels |
 
 ### Optional: auto-height
 
-The fixed-height embed above is the recommended default: predictable, and it
-cannot be broken by a script that fails to load. If you would rather the sidebar
-list ran to full length instead of scrolling inside the frame, use auto-height.
-
-Add `&autoheight=1` to the iframe `src`, then add this script to the same HTML
-card (or to **Settings → Code injection → Site footer**):
+The fixed-height embed above is the recommended default. If you would rather the
+full roster ran to its natural length than scrolled inside the frame, add
+`&autoheight=1` and add this to the same HTML card (or **Settings → Code
+injection → Site footer**):
 
 ```html
 <script>
@@ -184,27 +210,20 @@ card (or to **Settings → Code injection → Site footer**):
     if (!event.data || event.data.type !== 'tnc-map:height') return;
 
     const height = Number(event.data.height);
-    if (!Number.isFinite(height) || height < 200 || height > 5000) return;
+    if (!Number.isFinite(height) || height < 200 || height > 8000) return;
     frame.style.height = height + 'px';
   });
 </script>
 ```
 
-Both origin *and* source are checked. Either alone is weaker than it looks on a
-page that may host other embeds.
-
-Supported query parameters:
-
-| Parameter | Effect |
-| --- | --- |
-| `embed=1` | Hide the page heading, tighten the chrome |
-| `embed=0` | Force the full standalone layout even inside a frame |
-| `autoheight=1` | Grow to fit content and post height to the parent |
-| `height=520` | Map height in pixels, auto-height mode only |
+Both origin *and* source are checked; either alone is weaker than it looks on a
+page that may host other embeds. Note that auto-height makes the embed very
+tall — 103 members is a long list.
 
 ### Testing before you publish
 
-`dist/embed-test.html` is a mock Ghost post containing both embed modes:
+`dist/embed-test.html` is a mock Ghost post at the real 900px well, containing
+both embed modes:
 
 ```bash
 npm run build && npm run preview
@@ -225,10 +244,12 @@ scripts/
   schema.ts            Zod schema. Build-time only, never shipped
   geocode.ts           Cached, rate-limited Nominatim client
 src/
-  main.ts              Wiring, filters, summary line
-  map.ts               Leaflet, markers, clustering, popups
-  bounds.ts            Initial-view framing
-  sidebar.ts           Off-map member list
+  main.ts              Wiring, claim copy, search handling
+  map.ts               The evidence figure — non-interactive, aria-hidden
+  bounds.ts            Which pins the opening frame includes
+  roster.ts            The state-grouped member list
+  search.ts            Matching logic over name, description, city, state
+  states.ts            Two-letter code -> display name
   dataset.ts           Dataset access and derived views
   dom.ts               Node-building helpers (no innerHTML)
   embed.ts             Iframe detection and height reporting
@@ -241,32 +262,29 @@ reference/
 
 ## Notable behaviour, and why
 
-**Nothing is loaded from a CDN.** Leaflet, MarkerCluster, and both typefaces are
-installed from npm and bundled. The original pulled four separate CDN scripts
-with no integrity hashes; any of them going down took the map with it.
+**Nothing loads from a CDN.** Leaflet and both typefaces are bundled from npm.
+The original pulled four CDN scripts with no integrity hashes.
 
-**No `innerHTML`.** All rendering builds real DOM nodes with `textContent`. The
-original escaped most values but interpolated `tier` directly into a `class`
-attribute in two places, so a wrong value in a spreadsheet column could execute
-script. Node construction makes that unrepresentable rather than merely
-remembered.
+**No `innerHTML`.** All rendering builds DOM nodes with `textContent`. The
+original interpolated `tier` directly into a `class` attribute in two places, so
+a wrong value in a spreadsheet column could execute script.
 
-**The opening view frames the contiguous states.** Fitting all pins put one
-member in New Delhi and shrank the other 68 into an unreadable knot — that was
-the original's default view on every load. Outliers are now excluded from the
-opening camera by an interquartile fence (`src/bounds.ts`), *not* a hardcoded US
-bounding box, which would break the next international member. Excluded pins
-stay on the map, and the **"Show all"** control reports how many sit outside the
-current view.
+**Separators are real text nodes, not `::before`.** Generated content is not
+reliably exposed to assistive technology, so a CSS em dash between a member's
+name and description left screen readers announcing "Hola CulturaLatino arts and
+culture" — the same weld the visual fix removed, surviving where it could not be
+seen.
 
-**Every figure in the summary line comes from the same filtered set.** The
-original mixed scopes mid-sentence — tier counts from the full roster, the
-states count from the filtered pins — so toggling a tier produced a sentence
-that contradicted itself.
+**No negative inline margins inside the roster.** `overflow-y: auto` promotes
+the other axis from `visible` to `auto`, so anything bleeding past its grid
+track becomes a horizontal scrollbar on the list.
 
-**Scroll-wheel zoom is off until you click the map.** Inside an iframe this is
-the difference between a page that scrolls and one that traps the reader.
+**No clustering.** 69 members render as 69 dots, overlapping where the network
+is dense, because overlap reads as density and density is the argument.
+Clustering previously collapsed them into 26 marks on desktop and 10 on a phone.
 
-**Members sharing exact coordinates fan out on click.** 505omatic and UpLift
-Chronicles are both on Albuquerque's centroid; previously one was permanently
-hidden under the other.
+**The opening frame excludes statistical outliers** (`src/bounds.ts`), not a
+hardcoded US bounding box, which would break on the next international member.
+
+**Motion is absent by design.** The brief pins this surface as static; there are
+no transitions anywhere.

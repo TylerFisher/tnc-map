@@ -82,11 +82,16 @@ this claim, not an exception to it.
 - "member", never "customer", "client", or "partner newsroom".
 - Tiers are named Publisher, Community, and Alumni.
 - "beat-based" describes members defined by what they cover rather than where.
+- **"members served"** is the phrase for any figure that includes Alumni. It is
+  what makes a total of 103 honest rather than inflated: TNC served all 103,
+  including the 14 who have since moved on. Use it wherever the headline count
+  spans every tier.
 
 **Explicitly undecided**
 
-- Whether Alumni members should stay visible, be de-emphasized, or be removed.
-  Currently visible and filterable.
+- Whether Alumni are visually distinguished at all. The *counting* question is
+  settled by "members served" above, so tier may now vanish from the visual
+  without making the headline figure dishonest. Currently visible and filterable.
 - Whether the 21 members without confirmed locations will get cities added, or
   remain listed off-map indefinitely.
 - Whether the map should offer any path toward joining TNC. It currently does
