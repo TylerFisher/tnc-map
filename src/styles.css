@@ -212,6 +212,7 @@ body {
 
 .dot {
   display: block;
+  cursor: pointer;
   width: 11px;
   height: 11px;
   border-radius: 50%;
@@ -221,14 +222,17 @@ body {
 }
 
 /* Hovering a dot is the map reflecting the roster, not a control. Gold is
-   spent here and in the matching roster row, nowhere else. */
+   spent here and in the matching roster row, nowhere else.
+
+   The ring is a box-shadow rather than a larger width/height: growing the dot
+   changed its geometry on every hover, which read as a jump. Shadows do not
+   reflow. */
 .dot.is-lit {
   background: var(--brand-gold);
   border-color: var(--brand-navy);
-  box-shadow: 0 1px 4px rgb(27 29 67 / 45%);
-  width: 15px;
-  height: 15px;
-  margin: -2px 0 0 -2px;
+  box-shadow:
+    0 0 0 3.5px rgb(243 196 98 / 55%),
+    0 1px 4px rgb(27 29 67 / 45%);
 }
 
 /* Dimmed rather than removed when a search is active: the shape of the whole
@@ -357,6 +361,13 @@ body {
 .roster__item.is-lit {
   background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* Rows are programmatically focusable so a dot click can land on one. The
+   outline confirms where focus went for the ten members with no link. */
+.roster__item:focus {
+  outline: var(--focus);
+  outline-offset: -1px;
 }
 
 .roster__name {

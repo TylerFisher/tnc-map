@@ -29,6 +29,10 @@ export interface RosterCallbacks {
 export interface RosterController {
   render(members: readonly Member[]): void;
   light(id: string | null): void;
+  /** Whether a member is present in what is currently rendered. */
+  has(id: string): boolean;
+  /** Scrolls a member into view and moves keyboard focus to it. */
+  focus(id: string): void;
 }
 
 interface Group {
@@ -91,7 +95,9 @@ export function createRoster(
     // is not reliably exposed to assistive tech, so a pseudo-element dash left
     // screen readers announcing "Hola CulturaLatino arts and culture" — the
     // same weld, surviving where it could not be seen.
-    const row = el('li', { class: 'roster__item', 'data-id': member.id }, [
+    // `tabindex="-1"` so a click on the map can move focus here even for the
+    // ten members that have no URL and therefore no link to focus.
+    const row = el('li', { class: 'roster__item', 'data-id': member.id, tabindex: '-1' }, [
       nameNode(member.name, member.url, 'roster__name'),
       member.description && el('span', { class: 'roster__desc', text: ` — ${member.description}` }),
     ]);
@@ -108,6 +114,14 @@ export function createRoster(
     return row;
   }
 
+  /**
+   * Highlight only — deliberately does not scroll.
+   *
+   * Scrolling here meant that sweeping the pointer across the map dragged the
+   * roster around underneath it, one jump per dot passed over. Hover is a
+   * transient reflection; moving the reader's list is a thing only a click
+   * has earned. See `focus()`.
+   */
   function light(id: string | null): void {
     if (lit === id) return;
 
@@ -115,13 +129,27 @@ export function createRoster(
     lit = id;
     if (!id) return;
 
-    const row = rows.get(id);
-    if (!row) return;
-    row.classList.add('is-lit');
-    row.scrollIntoView({ block: 'nearest' });
+    rows.get(id)?.classList.add('is-lit');
   }
 
-  return { render, light };
+  /**
+   * Centres the row and moves focus to it — to the member's link when there is
+   * one, so the next keystroke can open the newsroom, and to the row itself
+   * otherwise. Scrolling happens first and focus is taken with `preventScroll`,
+   * so the row does not jump twice.
+   */
+  function focus(id: string): void {
+    const row = rows.get(id);
+    if (!row) return;
+
+    row.scrollIntoView({ block: 'center' });
+    light(id);
+
+    const target = row.querySelector<HTMLElement>('a.roster__name') ?? row;
+    target.focus({ preventScroll: true });
+  }
+
+  return { render, light, focus, has: (id) => rows.has(id) };
 }
 
 function groupByState(members: readonly Member[]): Group[] {

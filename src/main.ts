@@ -49,8 +49,24 @@ function main(): void {
     map.light(id);
   };
 
+  /**
+   * A dot click reveals its member in the roster. If a search is narrowing the
+   * list the member may not be rendered, so the search is cleared first —
+   * silently ignoring a click on a visible dot would read as broken.
+   */
+  const reveal = (id: string): void => {
+    if (!roster.has(id)) {
+      searchInput.value = '';
+      apply('');
+    }
+    roster.focus(id);
+    // Explicit rather than relying on the row's focusin to reach the map:
+    // the highlight is the point of the interaction, not a side-effect of it.
+    setLit(id);
+  };
+
   const roster = createRoster(listEl, { onLight: setLit });
-  const map = createMap(mustFind('#map'), members, { onLight: setLit });
+  const map = createMap(mustFind('#map'), members, { onLight: setLit, onSelect: reveal });
 
   let announceTimer: number | undefined;
 

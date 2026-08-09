@@ -43,6 +43,8 @@ const BOUNDS_PAD = 0.35;
 
 export interface MapCallbacks {
   onLight(id: string | null): void;
+  /** A dot was clicked. The roster, not a popup, is where the member lives. */
+  onSelect(id: string): void;
 }
 
 export interface MapController {
@@ -102,6 +104,7 @@ export function createMap(
     })
       .on('mouseover', () => callbacks.onLight(member.id))
       .on('mouseout', () => callbacks.onLight(null))
+      .on('click', () => callbacks.onSelect(member.id))
       .addTo(layer);
   }
 
