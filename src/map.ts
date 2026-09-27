@@ -26,6 +26,8 @@
  */
 
 import L from 'leaflet';
+import { leafletLayer, paintRules } from 'protomaps-leaflet';
+import { namedFlavor } from '@protomaps/basemaps';
 
 import { el } from './dom.js';
 import { withoutOutliers } from './bounds.js';
@@ -33,7 +35,13 @@ import type { Coords, Member } from './types.js';
 
 type PlacedMember = Member & { coords: Coords };
 
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+/**
+ * Self-hosted Protomaps extract, served by Caddy from the Railway volume (see
+ * Caddyfile and README). The whole world to z8, overzoomed past that: detail
+ * beyond z8 is irrelevant to a backdrop for dots.
+ */
+const TILES_URL = '/tiles/world.pmtiles';
+const TILES_MAX_DATA_ZOOM = 8;
 const FIT_PADDING: L.PointTuple = [28, 28];
 const FIT_MAX_ZOOM = 6;
 /** Close enough to separate two newsrooms in one city, no closer. */
@@ -78,10 +86,17 @@ export function createMap(
     maxZoom: MAX_ZOOM,
   });
 
-  // `detectRetina` is deliberately off: combined with fractional zoom it makes
-  // Leaflet scale @2x tiles by a non-integer factor, which leaves visible
-  // seams across the figure on high-DPI displays.
-  L.tileLayer(TILE_URL, { maxZoom: MAX_ZOOM, noWrap: true }).addTo(map);
+  const flavor = namedFlavor('white');
+  leafletLayer({
+    url: TILES_URL,
+    maxDataZoom: TILES_MAX_DATA_ZOOM,
+    maxZoom: MAX_ZOOM,
+    noWrap: true,
+    paintRules: paintRules(flavor),
+    // No label rules: the basemap carries no place names at all.
+    labelRules: [],
+    backgroundColor: flavor.background,
+  }).addTo(map);
 
   L.control.zoom({ position: 'topright' }).addTo(map);
 

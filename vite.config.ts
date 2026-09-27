@@ -13,5 +13,9 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    // The tile archive lives on the production volume, not in the repo.
+    proxy: {
+      '/tiles': { target: 'https://tnc-map-production.up.railway.app', changeOrigin: true },
+    },
   },
 });

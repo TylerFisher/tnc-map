@@ -1,0 +1,51 @@
+# Railpack serves the built site with Caddy and uses this file in place of its
+# default (https://railpack.com/languages/node#static-sites). It ports
+# `public/_headers`, which only Netlify and Cloudflare Pages read — keep the two
+# in step — and serves the basemap archive from the Railway volume.
+{
+	admin off
+	persist_config off
+	auto_https off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:{$PORT:80} {
+	respond /health 200
+
+	# ▸ EDIT THIS if the Ghost site lives on a different domain; see _headers.
+	header {
+		Content-Security-Policy "frame-ancestors 'self' https://tinynewsco.org https://*.tinynewsco.org"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "geolocation=(), camera=(), microphone=()"
+		-Server
+	}
+
+	# Protomaps archive on the volume mounted at /tiles. The browser reads it in
+	# byte ranges, which file_server supports; it must not be re-encoded, or the
+	# ranges stop lining up. The file is replaced rarely, so a day's cache is
+	# plenty and a regenerated archive still reaches readers within a day.
+	handle /tiles/* {
+		root * /
+		header Cache-Control "public, max-age=86400"
+		file_server
+	}
+
+	handle {
+		root * {{.StaticFileRoot}}
+		encode zstd gzip
+
+		# Vite fingerprints every filename in /assets.
+		header /assets/* Cache-Control "public, max-age=31536000, immutable"
+		# The page must revalidate, or a roster update stays invisible.
+		@page path / /index.html
+		header @page Cache-Control "public, max-age=0, must-revalidate"
+
+		try_files {path} {path}.html {path}/index.html
+		file_server {
+			hide .git .env*
+		}
+	}
+}

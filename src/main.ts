@@ -168,7 +168,7 @@ function writeEmptyState(
 /**
  * Tile attribution. Leaflet's own control is disabled so no chrome floats over
  * the evidence, which makes rendering it here a requirement rather than a
- * nicety — CARTO and OpenStreetMap both require visible credit.
+ * nicety — OpenStreetMap's license requires visible credit.
  */
 function writeCredit(): void {
   const updated = generatedAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -181,12 +181,12 @@ function writeCredit(): void {
       rel: 'noopener noreferrer',
       text: 'OpenStreetMap',
     }),
-    document.createTextNode(' contributors, © '),
+    document.createTextNode(' contributors, '),
     el('a', {
-      href: 'https://carto.com/attributions',
+      href: 'https://protomaps.com',
       target: '_blank',
       rel: 'noopener noreferrer',
-      text: 'CARTO',
+      text: 'Protomaps',
     }),
     document.createTextNode(`. Roster updated ${updated}.`),
   );

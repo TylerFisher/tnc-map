@@ -130,14 +130,37 @@ looks like an answer.
 
 ## Deploying
 
-Static output. Any host works; `netlify.toml` is included for Netlify, and
-`public/_headers` is read by both Netlify and Cloudflare Pages.
+Production runs on Railway (`tnc-map` service), which builds on every push to
+`main`. Railpack detects Vite, runs `npm run build`, and serves `dist` with
+Caddy using the repo-root `Caddyfile`. That file also carries the response
+headers; `public/_headers` holds the same rules for Netlify or Cloudflare Pages
+— keep the two in step.
 
 ```
 Build command:      npm run build
 Publish directory:  dist
 Node version:       22
 ```
+
+### Basemap tiles
+
+The basemap is a self-hosted [Protomaps](https://protomaps.com) archive, not a
+tile service: one file, `world.pmtiles` (~550 MB, the whole world to zoom 8),
+on a Railway volume mounted at `/tiles`. Caddy serves it at
+`/tiles/world.pmtiles`. It is not in the repo, and `npm run dev` proxies
+`/tiles` to production so local development needs no copy.
+
+To create or refresh it (rarely: OpenStreetMap changes don't matter at this
+zoom), with the [pmtiles CLI](https://docs.protomaps.com/pmtiles/cli):
+
+```sh
+# Pick a date from https://maps.protomaps.com/builds
+pmtiles extract https://build.protomaps.com/YYYYMMDD.pmtiles world.pmtiles \
+  --bbox=-180,-60,180,85 --maxzoom=8
+railway ssh -s tnc-map -- 'cat > /tiles/world.pmtiles.tmp && mv /tiles/world.pmtiles.tmp /tiles/world.pmtiles' < world.pmtiles
+```
+
+If the map shows only dots on a blank panel, this file is missing.
 
 ---
 
@@ -148,7 +171,8 @@ build elsewhere and embed it in an iframe.
 
 ### 1. Allow Ghost to frame the map
 
-In `public/_headers`, set `frame-ancestors` to the Ghost site's domain:
+In `Caddyfile` (and `public/_headers`), set `frame-ancestors` to the Ghost
+site's domain:
 
 ```
 /*
