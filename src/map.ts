@@ -21,12 +21,13 @@
  * - Dots are not tab stops. The map container is one focusable, labelled
  *   element with arrow-key panning; the roster carries every member for
  *   keyboard and screen-reader users.
- * - Tiles carry no place labels, so nothing competes with the claim and the
- *   basemap stops rendering "AFRIKA / أفريقيا" in a US-audience artifact.
+ * - The only place labels are city names, and only when zoomed in, so nothing
+ *   competes with the claim and the basemap stops rendering "AFRIKA /
+ *   أفريقيا" in a US-audience artifact.
  */
 
 import L from 'leaflet';
-import { leafletLayer, paintRules } from 'protomaps-leaflet';
+import { CenteredTextSymbolizer, leafletLayer, paintRules, type LabelRule } from 'protomaps-leaflet';
 import { namedFlavor } from '@protomaps/basemaps';
 
 import { el } from './dom.js';
@@ -42,6 +43,8 @@ type PlacedMember = Member & { coords: Coords };
  */
 const TILES_URL = '/tiles/world.pmtiles';
 const TILES_MAX_DATA_ZOOM = 8;
+/** City names appear only once a reader has zoomed well past the opening frame. */
+const CITY_LABEL_MIN_ZOOM = 6 ;
 const FIT_PADDING: L.PointTuple = [28, 28];
 const FIT_MAX_ZOOM = 6;
 /** Close enough to separate two newsrooms in one city, no closer. */
@@ -93,8 +96,7 @@ export function createMap(
     maxZoom: MAX_ZOOM,
     noWrap: true,
     paintRules: paintRules(flavor),
-    // No label rules: the basemap carries no place names at all.
-    labelRules: [],
+    labelRules: cityLabels(flavor),
     backgroundColor: flavor.background,
   }).addTo(map);
 
@@ -268,4 +270,30 @@ function addResetControl(map: L.Map, reset: () => void, home: () => string): () 
   map.on('moveend zoomend', sync);
   sync();
   return sync;
+}
+
+/**
+ * City names, text only, in the page's body face. Adapted from Protomaps'
+ * stock locality rule; its other one draws a dot beside each name, which would
+ * read as a member newsroom. Weights are the two the page already loads.
+ */
+function cityLabels(flavor: ReturnType<typeof namedFlavor>): LabelRule[] {
+  return [
+    {
+      dataLayer: 'places',
+      minzoom: CITY_LABEL_MIN_ZOOM,
+      filter: (_z, f) => f.props.kind === 'locality',
+      sort: (a, b) => Number(a.min_zoom ?? 0) - Number(b.min_zoom ?? 0),
+      symbolizer: new CenteredTextSymbolizer({
+        labelProps: ['name:en', 'name'],
+        fill: flavor.city_label,
+        lineHeight: 1.5,
+        font: (_z, f) => {
+          const major = Number(f?.props.min_zoom ?? 99) <= 5;
+          const size = Number(f?.props.population_rank ?? 0) > 9 ? 16 : 12;
+          return `${major ? 500 : 400} ${size}px "Work Sans", sans-serif`;
+        },
+      }),
+    },
+  ];
 }
