@@ -34,7 +34,7 @@
 	}
 
 	handle {
-		root * {{.StaticFileRoot}}
+		root * /app/dist
 		encode zstd gzip
 
 		# Vite fingerprints every filename in /assets.
