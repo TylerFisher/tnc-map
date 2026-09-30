@@ -221,9 +221,9 @@ width, change `--well` in `src/styles.css` to match.
 
 ### Optional: auto-height
 
-The fixed-height embed above is the recommended default. If you would rather the
-full roster ran to its natural length than scrolled inside the frame, add
-`&autoheight=1` and add this to the same HTML card (or **Settings → Code
+The roster always runs to its full length; there is no inner scroll region. In
+a fixed-height iframe the frame itself scrolls. To size the frame to fit
+instead, add `&autoheight=1` to the `src` and add this to the same HTML card (or **Settings → Code
 injection → Site footer**):
 
 ```html
@@ -245,7 +245,7 @@ injection → Site footer**):
 
 Both origin *and* source are checked; either alone is weaker than it looks on a
 page that may host other embeds. Note that auto-height makes the embed very
-tall — 103 members is a long list.
+tall — every member is listed.
 
 ### Testing before you publish
 
