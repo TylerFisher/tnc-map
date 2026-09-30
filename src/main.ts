@@ -18,7 +18,7 @@ import 'leaflet/dist/leaflet.css';
 import './styles.css';
 
 import { el, mustFind } from './dom.js';
-import { countStates, generatedAt, mappedMembers, members } from './dataset.js';
+import { countStates, mappedMembers, members } from './dataset.js';
 import { buildIndex, search } from './search.js';
 import { createRoster } from './roster.js';
 import { createMap } from './map.js';
@@ -38,7 +38,6 @@ function main(): void {
   const listEl = mustFind('#roster');
 
   writeClaim();
-  writeCredit();
 
   const index = buildIndex(members);
 
@@ -123,16 +122,11 @@ function main(): void {
  */
 function writeClaim(): void {
   const total = members.length;
-  const mapped = mappedMembers.length;
   const states = countStates(mappedMembers);
 
   mustFind('#claim').replaceChildren(
-    document.createTextNode(`${total} members served.`),
-    el('span', { class: 'claim__second', text: `${states} states and territories.` }),
+    document.createTextNode(`${total} members served in ${states} states and territories.`),
   );
-
-  mustFind('#claim-sub').textContent =
-    `${mapped} of them appear on the map. Every member is listed below.`;
 }
 
 function countLabel(shown: number, query: string): string {
@@ -162,33 +156,6 @@ function writeEmptyState(
     document.createTextNode(`No members match “${query}”. Try a place, a state, or a subject — `),
     clearButton,
     document.createTextNode(' to see all 103.'),
-  );
-}
-
-/**
- * Tile attribution. Leaflet's own control is disabled so no chrome floats over
- * the evidence, which makes rendering it here a requirement rather than a
- * nicety — OpenStreetMap's license requires visible credit.
- */
-function writeCredit(): void {
-  const updated = generatedAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-  mustFind('#credit').replaceChildren(
-    document.createTextNode('Map data © '),
-    el('a', {
-      href: 'https://www.openstreetmap.org/copyright',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-      text: 'OpenStreetMap',
-    }),
-    document.createTextNode(' contributors, '),
-    el('a', {
-      href: 'https://protomaps.com',
-      target: '_blank',
-      rel: 'noopener noreferrer',
-      text: 'Protomaps',
-    }),
-    document.createTextNode(`. Roster updated ${updated}.`),
   );
 }
 

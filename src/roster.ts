@@ -1,10 +1,7 @@
 /**
  * Band 3 — the substance, organised by state.
  *
- * Every one of the 103 members, name and description, each a link. This is
- * where the composition claim lands: the descriptions naming Filipino diaspora
- * newsrooms, Philadelphia's Afghan community and worker-owned tabletop-games
- * journalism are readable without a single click.
+ * Every member, each a link, with its location and coverage type.
  *
  * Grouping by state does work the map cannot. It makes "29 states and
  * territories" verifiable by scrolling rather than merely asserted, and it
@@ -50,7 +47,7 @@ interface Group {
  * location TNC has not recorded yet — a gap in the spreadsheet, not in the
  * network — so they are described as pending rather than as missing.
  */
-const BEAT_LABEL = 'National & beat-based';
+const BEAT_LABEL = 'National & diaspora';
 const PENDING_LABEL = 'Location to be confirmed';
 
 /** Sorts after every real place name. */
@@ -87,19 +84,15 @@ export function createRoster(
   }
 
   function rowFor(member: Member): HTMLElement {
-    // The description is the useful second half of the line. Without one the
-    // name stands alone rather than butting against what follows — the defect
-    // that rendered 14 members as "Bottom Up MediaPublisher".
-    //
-    // The separator is a real text node, not a CSS ::before: generated content
-    // is not reliably exposed to assistive tech, so a pseudo-element dash left
-    // screen readers announcing "Hola CulturaLatino arts and culture" — the
-    // same weld, surviving where it could not be seen.
     // `tabindex="-1"` so a click on the map can move focus here even for the
     // ten members that have no URL and therefore no link to focus.
+    const place = [member.city, member.state].filter(Boolean).join(', ');
     const row = el('li', { class: 'roster__item', 'data-id': member.id, tabindex: '-1' }, [
       nameNode(member.name, member.url, 'roster__name'),
-      member.description && el('span', { class: 'roster__desc', text: ` — ${member.description}` }),
+      // Columns do the separating visually; the hidden commas keep screen
+      // readers from welding "Black Belt News NetworkSelma, AL".
+      place && el('span', { class: 'roster__place' }, [el('span', { class: 'visually-hidden', text: ', ' }), place]),
+      el('span', { class: 'roster__coverage' }, [el('span', { class: 'visually-hidden', text: ', ' }), member.coverage]),
     ]);
 
     const enter = (): void => callbacks.onLight(member.id);
@@ -162,11 +155,12 @@ function groupByState(members: readonly Member[]): Group[] {
   };
 
   for (const member of members) {
-    if (member.state) {
+    // Checked first: a national outlet's state is just where its office is.
+    if (member.kind === 'beat') {
+      put(TRAILING + '1', BEAT_LABEL, member);
+    } else if (member.state) {
       const label = stateName(member.state);
       put(label, label, member);
-    } else if (member.kind === 'beat') {
-      put(TRAILING + '1', BEAT_LABEL, member);
     } else if (member.city) {
       // Located, just not in a US state — eShe is published from New Delhi.
       // Filing it under "location to be confirmed" would be plainly false.

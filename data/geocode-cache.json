@@ -1,6 +1,12 @@
 {
   "version": 1,
   "entries": {
+    "albany, ny": {
+      "lat": 42.6511674,
+      "lng": -73.754968,
+      "displayName": "City of Albany, Albany County, New York, United States",
+      "found": true
+    },
     "albuquerque, nm": {
       "lat": 35.0841034,
       "lng": -106.650985,
@@ -11,6 +17,12 @@
       "lat": 40.6022552,
       "lng": -75.4716115,
       "displayName": "Allentown, Lehigh County, Pennsylvania, United States",
+      "found": true
+    },
+    "arlington, va": {
+      "lat": 38.8769326,
+      "lng": -77.0893094,
+      "displayName": "Arlington County, Virginia, United States",
       "found": true
     },
     "atlantic city, nj": {
@@ -37,10 +49,22 @@
       "displayName": "Berea, Madison County, Kentucky, United States",
       "found": true
     },
+    "boston, fl": {
+      "lat": 28.659797,
+      "lng": -81.2093231,
+      "displayName": "Boston Hill Park, Oviedo, Seminole County, Florida, United States",
+      "found": true
+    },
     "boston, ma": {
       "lat": 42.3588336,
       "lng": -71.0578303,
       "displayName": "Boston, Suffolk County, Massachusetts, United States",
+      "found": true
+    },
+    "brambleton, va": {
+      "lat": 38.980908,
+      "lng": -77.5397667,
+      "displayName": "Brambleton, Loudoun County, Virginia, United States",
       "found": true
     },
     "brooklyn, ny": {
@@ -55,10 +79,22 @@
       "displayName": "Carrboro, Orange County, North Carolina, 27510, United States",
       "found": true
     },
+    "charleston, sc": {
+      "lat": 32.7884363,
+      "lng": -79.9399309,
+      "displayName": "Charleston, Charleston County, South Carolina, United States",
+      "found": true
+    },
     "charleston, wv": {
       "lat": 38.3505995,
       "lng": -81.6332812,
       "displayName": "Charleston, Kanawha County, West Virginia, United States",
+      "found": true
+    },
+    "charlottesville, va": {
+      "lat": 38.029306,
+      "lng": -78.4766781,
+      "displayName": "Charlottesville, Virginia, United States",
       "found": true
     },
     "chaska, mn": {
@@ -73,6 +109,12 @@
       "displayName": "Chicago, South Chicago Township, Cook County, Illinois, United States",
       "found": true
     },
+    "cleveland, nm": {
+      "lat": 35.9933183,
+      "lng": -105.3706771,
+      "displayName": "Cleveland, Mora County, New Mexico, 87715, United States",
+      "found": true
+    },
     "colorado springs, co": {
       "lat": 38.8339578,
       "lng": -104.825348,
@@ -83,6 +125,30 @@
       "lat": 34.000754,
       "lng": -81.0352313,
       "displayName": "Columbia, Richland County, South Carolina, United States",
+      "found": true
+    },
+    "crow agency, mt": {
+      "lat": 45.6014832,
+      "lng": -107.4611372,
+      "displayName": "Crow Agency, Big Horn County, Montana, 59022, United States",
+      "found": true
+    },
+    "denver, co": {
+      "lat": 39.7392364,
+      "lng": -104.984862,
+      "displayName": "Denver, Colorado, United States",
+      "found": true
+    },
+    "duluth, ga": {
+      "lat": 34.0028569,
+      "lng": -84.1441046,
+      "displayName": "Duluth, Gwinnett County, Georgia, 30095, United States",
+      "found": true
+    },
+    "durham, nc": {
+      "lat": 35.996653,
+      "lng": -78.9018053,
+      "displayName": "Durham, Durham County, North Carolina, United States",
       "found": true
     },
     "eden prairie, mn": {
@@ -97,10 +163,34 @@
       "displayName": "Estes Park, Larimer County, Colorado, 80517, United States",
       "found": true
     },
+    "fort bragg, ca": {
+      "lat": 39.4436579,
+      "lng": -123.8057607,
+      "displayName": "Fort Bragg, Mendocino County, California, 95437, United States",
+      "found": true
+    },
+    "galax, va": {
+      "lat": 36.6612387,
+      "lng": -80.9239671,
+      "displayName": "Galax, Virginia, 24333, United States",
+      "found": true
+    },
     "glasgow, ky": {
       "lat": 36.995906,
       "lng": -85.9124842,
       "displayName": "Glasgow, Barren County, Kentucky, 42142, United States",
+      "found": true
+    },
+    "grand haven, mi": {
+      "lat": 43.0630734,
+      "lng": -86.2283864,
+      "displayName": "Grand Haven, Ottawa County, Michigan, United States",
+      "found": true
+    },
+    "greater los angeles, ca": {
+      "lat": 34.1330476,
+      "lng": -118.2171247,
+      "displayName": "Greater Los Angeles Agency on Deafness - Main Office, 2222, Laverna Avenue, Eagle Rock, Los Angeles, Los Angeles County, California, 90041, United States",
       "found": true
     },
     "hartford, ct": {
@@ -121,10 +211,22 @@
       "displayName": "Honolulu, Honolulu County, Hawaii, United States",
       "found": true
     },
+    "hopewell, nj": {
+      "lat": 40.3892726,
+      "lng": -74.7618285,
+      "displayName": "Hopewell, Mercer County, New Jersey, 08525, United States",
+      "found": true
+    },
     "houston, tx": {
       "lat": 29.7589382,
       "lng": -95.3676974,
       "displayName": "Houston, Harris County, Texas, United States",
+      "found": true
+    },
+    "kailua, hi": {
+      "lat": 19.641941,
+      "lng": -155.996933,
+      "displayName": "Kailua, Hawaiʻi County, Hawaii, United States",
       "found": true
     },
     "la conner, wa": {
@@ -175,16 +277,34 @@
       "displayName": "Montclair, Essex County, New Jersey, United States",
       "found": true
     },
+    "montgomery county, md": {
+      "lat": 39.1406267,
+      "lng": -77.2075612,
+      "displayName": "Montgomery County, Maryland, United States",
+      "found": true
+    },
     "new delhi": {
       "lat": 28.6138954,
       "lng": 77.2090057,
       "displayName": "New Delhi, Delhi, India",
       "found": true
     },
+    "new york city, ny": {
+      "lat": 40.7127281,
+      "lng": -74.0060152,
+      "displayName": "New York, United States",
+      "found": true
+    },
     "new york, ny": {
       "lat": 40.7127281,
       "lng": -74.0060152,
       "displayName": "New York, United States",
+      "found": true
+    },
+    "newark, nj": {
+      "lat": 40.735657,
+      "lng": -74.1723667,
+      "displayName": "Newark, Essex County, New Jersey, United States",
       "found": true
     },
     "newberg, or": {
@@ -205,6 +325,18 @@
       "displayName": "Oxford, Oxford Township, Butler County, Ohio, 45056, United States",
       "found": true
     },
+    "palmer, ak": {
+      "lat": 61.5995703,
+      "lng": -149.11109,
+      "displayName": "Palmer, Matanuska-Susitna Borough, Alaska, United States",
+      "found": true
+    },
+    "palmyra, va": {
+      "lat": 37.8647,
+      "lng": -78.2615037,
+      "displayName": "Palmyra, Fluvanna County, Virginia, United States",
+      "found": true
+    },
     "parsons, wv": {
       "lat": 39.0968695,
       "lng": -79.6809332,
@@ -223,6 +355,12 @@
       "displayName": "Philadelphia, Philadelphia County, Pennsylvania, United States",
       "found": true
     },
+    "phoenix, az": {
+      "lat": 33.4484367,
+      "lng": -112.074141,
+      "displayName": "Phoenix, Maricopa County, Arizona, United States",
+      "found": true
+    },
     "pittsburgh, pa": {
       "lat": 40.4406968,
       "lng": -80.0025666,
@@ -239,6 +377,12 @@
       "lat": 45.5202471,
       "lng": -122.674194,
       "displayName": "Portland, Multnomah County, Oregon, United States",
+      "found": true
+    },
+    "prince george's county, md": {
+      "lat": 38.803929,
+      "lng": -76.8518695,
+      "displayName": "Prince George's County, Maryland, United States",
       "found": true
     },
     "prior lake, mn": {
@@ -265,6 +409,24 @@
       "displayName": "San Angelo, Tom Green County, Texas, United States",
       "found": true
     },
+    "san francisco bay area, ca": {
+      "lat": 37.7884969,
+      "lng": -122.3558473,
+      "displayName": "San Francisco Bay Area, San Francisco, California, 94130, United States",
+      "found": true
+    },
+    "san francisco, ca": {
+      "lat": 37.7879363,
+      "lng": -122.4075201,
+      "displayName": "San Francisco, California, United States",
+      "found": true
+    },
+    "san gabriel valley, ca": {
+      "lat": 33.7263142,
+      "lng": -117.9256426,
+      "displayName": "San Gabriel Street, Fountain Valley, Orange County, California, 92708, United States",
+      "found": true
+    },
     "san juan, pr": {
       "lat": 18.384239,
       "lng": -66.05344,
@@ -275,6 +437,18 @@
       "lat": 33.7358518,
       "lng": -118.2922934,
       "displayName": "San Pedro, Los Angeles, Los Angeles County, California, 90732, United States",
+      "found": true
+    },
+    "sante fe, nm": {
+      "lat": 35.4805838,
+      "lng": -108.8499456,
+      "displayName": "Sante Fe Road, McKinley County, New Mexico, United States",
+      "found": true
+    },
+    "seal beach, ca": {
+      "lat": 33.7423967,
+      "lng": -118.1055926,
+      "displayName": "Seal Beach, Orange County, California, United States",
       "found": true
     },
     "seattle, wa": {
@@ -289,16 +463,58 @@
       "displayName": "Selma, Dallas County, Alabama, United States",
       "found": true
     },
+    "south durham, nc": {
+      "lat": 35.9045698,
+      "lng": -78.9764403,
+      "displayName": "South Durham Water Reclamation Facility, Durham, Durham County, North Carolina, United States",
+      "found": true
+    },
+    "south side chicago, il": {
+      "lat": 41.8566999,
+      "lng": -87.6247738,
+      "displayName": "Near South Side, Chicago, South Chicago Township, Cook County, Illinois, 60605, United States",
+      "found": true
+    },
+    "st michael, mn": {
+      "lat": 45.210202,
+      "lng": -93.6648083,
+      "displayName": "Saint Michael, Wright County, Minnesota, 55376, United States",
+      "found": true
+    },
+    "st. petersburg, fl": {
+      "lat": 27.7712264,
+      "lng": -82.6340259,
+      "displayName": "Saint Petersburg, Pinellas County, Florida, United States",
+      "found": true
+    },
+    "tucker county, wv": {
+      "lat": 39.1256758,
+      "lng": -79.5607117,
+      "displayName": "Tucker County, West Virginia, United States",
+      "found": true
+    },
     "tucson, az": {
       "lat": 32.2228765,
       "lng": -110.974847,
       "displayName": "Tucson, Pima County, Arizona, United States",
       "found": true
     },
+    "tulsa, ok": {
+      "lat": 36.1563122,
+      "lng": -95.9927516,
+      "displayName": "Tulsa, Oklahoma, United States",
+      "found": true
+    },
     "ukiah, ca": {
       "lat": 39.1501662,
       "lng": -123.2077861,
       "displayName": "Ukiah, Mendocino County, California, 95482, United States",
+      "found": true
+    },
+    "uniontown, ks": {
+      "lat": 37.8472619,
+      "lng": -94.9752495,
+      "displayName": "Uniontown, Bourbon County, Kansas, United States",
       "found": true
     },
     "upland, ca": {
@@ -313,7 +529,19 @@
       "displayName": "Utica, Hinds County, Mississippi, United States",
       "found": true
     },
+    "washington, d.c., dc": {
+      "lat": 38.8950982,
+      "lng": -77.0363849,
+      "displayName": "Washington, District of Columbia, United States",
+      "found": true
+    },
     "washington, dc": {
+      "lat": 38.8950982,
+      "lng": -77.0363849,
+      "displayName": "Washington, District of Columbia, United States",
+      "found": true
+    },
+    "washington, dc, dc": {
       "lat": 38.8950982,
       "lng": -77.0363849,
       "displayName": "Washington, District of Columbia, United States",
@@ -331,10 +559,22 @@
       "displayName": "Whittier, Los Angeles County, California, United States",
       "found": true
     },
+    "wichita falls, tx": {
+      "lat": 33.9004572,
+      "lng": -98.5020777,
+      "displayName": "Wichita Falls, Wichita County, Texas, United States",
+      "found": true
+    },
     "wichita, ks": {
       "lat": 37.6922361,
       "lng": -97.3375448,
       "displayName": "Wichita, Sedgwick County, Kansas, United States",
+      "found": true
+    },
+    "winston salem, nc": {
+      "lat": 36.0998131,
+      "lng": -80.2440518,
+      "displayName": "Winston-Salem, Forsyth County, North Carolina, United States",
       "found": true
     },
     "winston-salem, nc": {
@@ -353,6 +593,12 @@
       "lat": 36.9479966,
       "lng": -81.0869747,
       "displayName": "Wytheville, Wythe County, Virginia, 24382, United States",
+      "found": true
+    },
+    "yonkers, ny": {
+      "lat": 40.9312099,
+      "lng": -73.8987469,
+      "displayName": "City of Yonkers, Westchester County, New York, United States",
       "found": true
     },
     "zuni pueblo, nm": {

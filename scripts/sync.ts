@@ -131,7 +131,7 @@ function parseCsv(csv: string, report: Report): RawRow[] {
     if (!result.success) {
       for (const issue of result.error.issues) {
         const field = issue.path.join('.') || 'row';
-        report.errors.push(`Row ${line} (${raw.name || 'unnamed'}): ${field} — ${issue.message}`);
+        report.errors.push(`Row ${line} (${raw['outlet name'] || 'unnamed'}): ${field} — ${issue.message}`);
       }
       return;
     }
@@ -196,13 +196,12 @@ async function buildMembers(rows: RawRow[], report: Report): Promise<Member[]> {
     members.push({
       id: uniqueId(slugify(row.name), usedIds),
       name: row.name,
-      tier: row.tier,
       kind: row.kind,
+      coverage: row.coverage,
       city: row.city,
       state: row.state,
       coords,
       coordSource,
-      description: row.description,
       url: row.url,
     });
   }

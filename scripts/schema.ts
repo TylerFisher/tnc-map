@@ -2,13 +2,11 @@
  * Build-time validation of the Google Sheet.
  *
  * The whole point of this file is that a typo in a spreadsheet becomes a loud
- * build failure instead of a silently missing pin (or, in the case of the
- * `tier` column, a script-injection vector — the original map interpolated
- * `tier` straight into a class attribute without escaping).
+ * build failure instead of a silently missing pin.
  */
 
 import { z } from 'zod';
-import { TIERS, MEMBER_KINDS } from '../src/types.js';
+import type { Coverage, MemberKind } from '../src/types.js';
 
 const trimmed = z.string().trim();
 
@@ -61,67 +59,64 @@ const webUrl = trimmed.transform((v, ctx) => {
   return parsed.toString();
 });
 
-/** Case- and whitespace-insensitive match against a fixed set of options. */
-const enumLoose = <T extends readonly [string, ...string[]]>(options: T, column: string) =>
-  trimmed.transform((v, ctx) => {
-    const hit = options.find((o) => o.toLowerCase() === v.toLowerCase());
-    if (!hit) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `${column} "${v}" is not one of: ${options.join(', ')}`,
-      });
-      return z.NEVER;
-    }
-    return hit as T[number];
-  });
+/** Sheet "Coverage Type" -> how the map treats it. National and diaspora outlets get no pin. */
+const COVERAGE: Record<string, [Coverage, MemberKind]> = {
+  'place-based': ['Place-based', 'place'],
+  regional: ['Regional', 'place'],
+  national: ['National', 'beat'],
+  diaspora: ['Diaspora', 'beat'],
+};
 
 export const RawRowSchema = z
   .object({
-    name: trimmed.min(1, 'name is required'),
-    tier: enumLoose(TIERS, 'tier'),
-    // The Sheet leaves `type` blank more often than not; `place` is the sane default.
-    type: trimmed.default('place').transform((v) => (v === '' ? 'place' : v)),
+    'outlet name': trimmed.min(1, 'name is required'),
     city: blankToNull,
     state: blankToNull,
-    lat: coordinate(-90, 90, 'lat'),
-    lng: coordinate(-180, 180, 'lng'),
-    description: blankToNull,
+    latitude: coordinate(-90, 90, 'latitude'),
+    longitude: coordinate(-180, 180, 'longitude'),
     url: webUrl,
-    // Editorial workflow columns. Read by humans, ignored by the renderer,
-    // but accepted here so their presence doesn't fail validation.
-    status: blankToNull.optional(),
-    notes: blankToNull.optional(),
+    'coverage type': trimmed,
   })
   .transform((row, ctx) => {
-    const kind = MEMBER_KINDS.find((k) => k === row.type.toLowerCase());
-    if (!kind) {
+    const hit = COVERAGE[row['coverage type'].toLowerCase()];
+    if (!hit) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `type "${row.type}" is not one of: ${MEMBER_KINDS.join(', ')}`,
+        message: `coverage type "${row['coverage type']}" is not one of: Place-based, Regional, National, Diaspora`,
       });
       return z.NEVER;
     }
+    const [coverage, kind] = hit;
     // A half-filled coordinate pair is a data-entry mistake, not a location.
-    if ((row.lat === null) !== (row.lng === null)) {
+    if ((row.latitude === null) !== (row.longitude === null)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `row has ${row.lat === null ? 'lng but no lat' : 'lat but no lng'}`,
+        message: `row has ${row.latitude === null ? 'longitude but no latitude' : 'latitude but no longitude'}`,
       });
       return z.NEVER;
     }
-    return { ...row, kind };
+    // Some national rows carry HQ coordinates; a pin would claim local coverage.
+    const placed = kind === 'place';
+    return {
+      name: row['outlet name'],
+      kind,
+      coverage,
+      city: row.city,
+      state: row.state,
+      lat: placed ? row.latitude : null,
+      lng: placed ? row.longitude : null,
+      url: row.url,
+    };
   });
 
 export type RawRow = z.infer<typeof RawRowSchema>;
 
 export const REQUIRED_COLUMNS = [
-  'name',
-  'tier',
-  'type',
+  'outlet name',
   'city',
   'state',
-  'lat',
-  'lng',
-  'description',
+  'latitude',
+  'longitude',
   'url',
+  'coverage type',
 ] as const;

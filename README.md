@@ -86,26 +86,19 @@ map down.
 
 | Column | Required | Notes |
 | --- | --- | --- |
-| `name` | ✅ | Must be unique. Duplicates are an error |
-| `tier` | ✅ | `Publisher`, `Community`, or `Alumni`. Case-insensitive |
-| `type` | | `place` (default) or `beat` |
-| `city` | | Fill this in and coordinates are looked up automatically |
-| `state` | | Two-letter code. **Also what the roster groups by** |
-| `lat` / `lng` | | Optional. Overrides geocoding when present |
-| `description` | | One line. This is the most valuable column — see below |
-| `url` | | Must be `http(s)`. Anything else is rejected |
-| `status`, `notes` | | For humans. Ignored by the code |
+| `Outlet Name` | ✅ | Must be unique. Duplicates are an error |
+| `Coverage Type` | ✅ | `Place-based` or `Regional` get a pin; `National` or `Diaspora` don't |
+| `City` | | Fill this in and coordinates are looked up automatically |
+| `State` | | Two-letter code. **Also what the roster groups by** |
+| `Latitude` / `Longitude` | | Optional. Overrides geocoding when present |
+| `URL` | | Must be `http(s)`. Anything else is rejected |
+
+Every other column is ignored.
 
 **You almost never need to fill in `lat`/`lng` by hand.** Type a city and state;
 the sync script geocodes it and caches the result. Coordinates you *do* enter
 are never overwritten — they are cross-checked against the city and you get a
 warning if they disagree by more than 60 km.
-
-**`description` is the column that does the persuading.** "News and information
-for Philadelphia's Afghan community" is the kind of detail no other organisation
-could truthfully claim about its network. It appears in the roster next to every
-name and is fully searchable. A member with no description still renders
-correctly — it just contributes nothing to the argument.
 
 **`state` matters even without coordinates.** Witness PA and Community Voices
 have a state but no city, so they cannot be mapped — but they still appear under

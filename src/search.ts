@@ -2,7 +2,7 @@
  * Roster search.
  *
  * Search is the surface's answer to finding a newsroom — the map is evidence
- * and is deliberately not operable. It matches across name, description, city
+ * and is deliberately not operable. It matches across name, coverage type, city
  * and state, which means it doubles as a demonstration of the network's
  * composition: typing "Filipino" returns Ang Diaryo, Mahalaya and Tayo;
  * "Spanish" returns outlets in four states. A funder testing whether the
@@ -44,7 +44,7 @@ export function buildIndex(members: readonly Member[]): IndexedMember[] {
     const code = (member.state ?? '').toUpperCase();
     const parts = [
       member.name,
-      member.description ?? '',
+      member.coverage,
       member.city ?? '',
       code,
       code ? stateName(code) : '',

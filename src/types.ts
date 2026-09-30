@@ -6,16 +6,15 @@
  * By the time a Member reaches this code it is already known-good.
  */
 
-export const TIERS = ['Publisher', 'Community', 'Alumni'] as const;
-export type Tier = (typeof TIERS)[number];
-
 export const MEMBER_KINDS = ['place', 'beat'] as const;
 /**
  * `place` — the newsroom serves a geographic area and belongs on the map.
- * `beat`  — the newsroom is defined by subject matter, not geography, and
+ * `beat`  — a national or diaspora newsroom, not defined by geography, and
  *           intentionally has no pin. This is not missing data.
  */
 export type MemberKind = (typeof MEMBER_KINDS)[number];
+
+export type Coverage = 'Place-based' | 'Regional' | 'National' | 'Diaspora';
 
 export interface Coords {
   lat: number;
@@ -28,14 +27,13 @@ export interface Member {
   /** Stable slug derived from the name; survives row reordering in the Sheet. */
   id: string;
   name: string;
-  tier: Tier;
   kind: MemberKind;
+  coverage: Coverage;
   city: string | null;
   state: string | null;
   coords: Coords | null;
   /** Where `coords` came from. Absent when `coords` is null. */
   coordSource: CoordSource | null;
-  description: string | null;
   /** Guaranteed http(s) — other protocols are rejected at build time. */
   url: string | null;
 }
