@@ -439,6 +439,12 @@
       "displayName": "San Pedro, Los Angeles, Los Angeles County, California, 90732, United States",
       "found": true
     },
+    "santa fe, nm": {
+      "lat": 35.6876096,
+      "lng": -105.938456,
+      "displayName": "Santa Fe, Santa Fe County, New Mexico, United States",
+      "found": true
+    },
     "sante fe, nm": {
       "lat": 35.4805838,
       "lng": -108.8499456,

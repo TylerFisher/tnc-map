@@ -42,9 +42,11 @@ const coordinate = (min: number, max: number, label: string) =>
  */
 const webUrl = trimmed.transform((v, ctx) => {
   if (v === '') return null;
+  // Spreadsheets drop the scheme ("www.example.com"); assume https.
+  const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(v) ? v : `https://${v}`;
   let parsed: URL;
   try {
-    parsed = new URL(v);
+    parsed = new URL(withScheme);
   } catch {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: `url "${v}" is not a valid URL` });
     return z.NEVER;

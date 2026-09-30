@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T19:57:27.363Z",
+  "generatedAt": "2026-09-30T20:02:51.475Z",
   "source": "local-csv",
   "members": [
     {
@@ -7,7 +7,7 @@
       "name": "505omatic",
       "kind": "place",
       "coverage": "Place-based",
-      "city": "Sante Fe",
+      "city": "Santa Fe",
       "state": "NM",
       "coords": {
         "lat": 35.687,
@@ -223,7 +223,7 @@
       "kind": "beat",
       "coverage": "National",
       "city": null,
-      "state": null,
+      "state": "National",
       "coords": null,
       "coordSource": null,
       "url": "https://www.climategendered.com/"
@@ -353,7 +353,7 @@
       "name": "Ethiopique",
       "kind": "place",
       "coverage": "Place-based",
-      "city": "Washington",
+      "city": "Washington, DC",
       "state": "DC",
       "coords": {
         "lat": 38.9072,
@@ -813,7 +813,7 @@
         "lng": -73.7562
       },
       "coordSource": "sheet",
-      "url": "https://sanpedrogazette.com/"
+      "url": "https://sahntejean.com/"
     },
     {
       "id": "san-pedro-gazette",
@@ -940,7 +940,7 @@
       "name": "The 51st",
       "kind": "place",
       "coverage": "Place-based",
-      "city": "Washington",
+      "city": "Washington, D.C.",
       "state": "DC",
       "coords": {
         "lat": 38.9072,
