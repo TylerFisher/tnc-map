@@ -18,7 +18,7 @@ import 'leaflet/dist/leaflet.css';
 import './styles.css';
 
 import { el, mustFind } from './dom.js';
-import { countStates, mappedMembers, members } from './dataset.js';
+import { countStates, generatedAt, mappedMembers, members } from './dataset.js';
 import { buildIndex, search } from './search.js';
 import { createRoster } from './roster.js';
 import { createMap } from './map.js';
@@ -37,7 +37,7 @@ function main(): void {
   const emptyEl = mustFind('#roster-empty');
   const listEl = mustFind('#roster');
 
-  writeClaim();
+  writeAsOf();
 
   const index = buildIndex(members);
 
@@ -115,18 +115,10 @@ function main(): void {
   window.addEventListener('resize', () => map.invalidate());
 }
 
-/**
- * "Members served" rather than "members": the total includes 14 alumni, and
- * TNC did serve all of them. This is the phrasing that makes the headline
- * figure honest instead of inflated — see PRODUCT.md.
- */
-function writeClaim(): void {
-  const total = members.length;
-  const states = countStates(mappedMembers);
-
-  mustFind('#claim').replaceChildren(
-    document.createTextNode(`${total} members served in ${states} states and territories.`),
-  );
+/** The date of the last `npm run sync`, i.e. when the roster last changed. */
+function writeAsOf(): void {
+  mustFind('#as-of').textContent =
+    `As of ${generatedAt.toLocaleDateString('en-US', { dateStyle: 'long' })}`;
 }
 
 function countLabel(shown: number, query: string): string {
@@ -155,7 +147,7 @@ function writeEmptyState(
   target.replaceChildren(
     document.createTextNode(`No members match “${query}”. Try a place, a state, or a subject — `),
     clearButton,
-    document.createTextNode(' to see all 103.'),
+    document.createTextNode(` to see all ${members.length}.`),
   );
 }
 
@@ -170,8 +162,9 @@ if (document.readyState === 'loading') {
 // Surface failures in the UI instead of only the console — this page is
 // normally embedded, where nobody is watching devtools.
 window.addEventListener('error', (event) => {
-  const claim = document.querySelector('#claim-sub');
-  if (claim && !claim.textContent) {
-    claim.textContent = `The map failed to load: ${event.message}`;
+  const note = document.querySelector<HTMLElement>('#as-of');
+  if (note && !note.dataset.failed) {
+    note.dataset.failed = '1';
+    note.textContent = `The map failed to load: ${event.message}`;
   }
 });
