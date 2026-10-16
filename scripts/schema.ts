@@ -64,7 +64,8 @@ const webUrl = trimmed.transform((v, ctx) => {
 /** Sheet "Coverage Type" -> how the map treats it. National and diaspora outlets get no pin. */
 const COVERAGE: Record<string, [Coverage, MemberKind]> = {
   'place-based': ['Place-based', 'place'],
-  regional: ['Regional', 'place'],
+  // Shown as place-based: the distinction isn't one we surface.
+  regional: ['Place-based', 'place'],
   national: ['National', 'beat'],
   diaspora: ['Diaspora', 'beat'],
 };

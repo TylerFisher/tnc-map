@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T20:02:51.475Z",
+  "generatedAt": "2026-10-16T09:49:29.594Z",
   "source": "local-csv",
   "members": [
     {
@@ -112,7 +112,7 @@
       "id": "black-belt-news-network",
       "name": "Black Belt News Network",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Selma",
       "state": "AL",
       "coords": {
@@ -257,7 +257,7 @@
       "id": "coyote",
       "name": "COYOTE",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "San Francisco Bay Area",
       "state": "CA",
       "coords": {
@@ -271,7 +271,7 @@
       "id": "crosswinds-news",
       "name": "Crosswinds News",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Tulsa",
       "state": "OK",
       "coords": {
@@ -299,7 +299,7 @@
       "id": "dark-roast-report",
       "name": "Dark Roast Report",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Wichita Falls",
       "state": "TX",
       "coords": {
@@ -380,7 +380,7 @@
       "id": "four-points-press",
       "name": "Four Points Press",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Crow Agency",
       "state": "MT",
       "coords": {
@@ -394,7 +394,7 @@
       "id": "future-tides",
       "name": "Future Tides",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Seattle",
       "state": "WA",
       "coords": {
@@ -475,7 +475,7 @@
       "id": "investigate-la",
       "name": "Investigate LA",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "San Gabriel Valley",
       "state": "CA",
       "coords": {
@@ -601,7 +601,7 @@
       "id": "mendo-local",
       "name": "Mendo Local",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Fort Bragg",
       "state": "CA",
       "coords": {
@@ -685,7 +685,7 @@
       "id": "ottawa-news-network",
       "name": "Ottawa News Network",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Grand Haven",
       "state": "MI",
       "coords": {
@@ -861,7 +861,7 @@
       "id": "spotlight-schools",
       "name": "Spotlight Schools",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Seal Beach",
       "state": "CA",
       "coords": {
@@ -875,7 +875,7 @@
       "id": "sprawlism",
       "name": "Sprawlism",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Newark",
       "state": "NJ",
       "coords": {
@@ -978,7 +978,7 @@
       "id": "the-edge",
       "name": "The Edge",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Berea",
       "state": "KY",
       "coords": {
@@ -1109,7 +1109,7 @@
       "id": "the-neighborly",
       "name": "The Neighborly",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Galax",
       "state": "VA",
       "coords": {
@@ -1190,7 +1190,7 @@
       "id": "the-shout",
       "name": "The SHOUT",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Wichita",
       "state": "KS",
       "coords": {
@@ -1204,7 +1204,7 @@
       "id": "the-southlander",
       "name": "The Southlander",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Greater Los Angeles",
       "state": "CA",
       "coords": {
@@ -1246,7 +1246,7 @@
       "id": "tucson-spotlight",
       "name": "Tucson Spotlight",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Tucson",
       "state": "AZ",
       "coords": {
@@ -1260,7 +1260,7 @@
       "id": "uplands-uplifting-news",
       "name": "Uplands-Uplifting News",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Cleveland",
       "state": "NM",
       "coords": {
@@ -1316,7 +1316,7 @@
       "id": "witness-pa",
       "name": "Witness PA",
       "kind": "place",
-      "coverage": "Regional",
+      "coverage": "Place-based",
       "city": "Pittsburgh",
       "state": "PA",
       "coords": {

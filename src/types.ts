@@ -14,7 +14,7 @@ export const MEMBER_KINDS = ['place', 'beat'] as const;
  */
 export type MemberKind = (typeof MEMBER_KINDS)[number];
 
-export type Coverage = 'Place-based' | 'Regional' | 'National' | 'Diaspora';
+export type Coverage = 'Place-based' | 'National' | 'Diaspora';
 
 export interface Coords {
   lat: number;

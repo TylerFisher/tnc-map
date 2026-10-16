@@ -96,7 +96,6 @@ body {
 .claim__figure {
   font-family: var(--font-heading);
   font-weight: 700;
-  /* Floor high enough that the title still outranks a six-line intro on phones. */
   font-size: clamp(34px, 5vw, 42px);
   line-height: 1.12;
   letter-spacing: -0.02em;
@@ -104,22 +103,11 @@ body {
   max-width: 32ch;
 }
 
-/* Set apart from the intro by size, weight and tone, and by sitting tight
-   under the title rather than with the paragraph. */
 .claim__asof {
   margin-top: 4px;
   font-size: 13px;
   font-weight: 500;
   color: var(--muted);
-}
-
-.claim__sub {
-  margin-top: clamp(16px, 2vw, 22px);
-  font-size: 16px;
-  line-height: 1.55;
-  text-wrap: pretty;
-  color: var(--ink);
-  max-width: 62ch;
 }
 
 /* ---------- Band 2 — the evidence ------------------------------------- */
@@ -428,11 +416,7 @@ a.roster__name:hover {
 }
 
 @media (max-width: 640px) {
-  .claim__sub {
-    font-size: 15px;
-  }
-
-  /* Name on its own line; location and coverage share the one beneath. */
+    /* Name on its own line; location and coverage share the one beneath. */
   .roster__item {
     grid-template-columns: auto minmax(0, 1fr);
   }
