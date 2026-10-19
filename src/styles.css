@@ -313,7 +313,7 @@ body {
 
 .roster__item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 13rem 6rem;
+  grid-template-columns: minmax(0, 1fr) 13rem;
   gap: 0 16px;
   align-items: baseline;
   padding: 4px 8px 5px;
@@ -345,12 +345,6 @@ a.roster__name:hover {
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
-}
-
-.roster__coverage {
-  grid-column: 3;
-  font-size: 13px;
-  color: var(--muted);
 }
 
 .roster__place {
@@ -416,17 +410,9 @@ a.roster__name:hover {
 }
 
 @media (max-width: 640px) {
-    /* Name on its own line; location and coverage share the one beneath. */
+  /* Name on its own line, location beneath. */
   .roster__item {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .roster__name {
-    grid-column: 1 / -1;
-  }
-
-  .roster__coverage {
-    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   :root {

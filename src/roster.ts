@@ -1,7 +1,7 @@
 /**
  * Band 3 — the substance, organised by state.
  *
- * Every member, each a link, with its location and coverage type.
+ * Every member, each a link, with its location.
  *
  * Grouping by state does work the map cannot. It makes "29 states and
  * territories" verifiable by scrolling rather than merely asserted, and it
@@ -89,10 +89,9 @@ export function createRoster(
     const place = [member.city, member.state].filter(Boolean).join(', ');
     const row = el('li', { class: 'roster__item', 'data-id': member.id, tabindex: '-1' }, [
       nameNode(member.name, member.url, 'roster__name'),
-      // Columns do the separating visually; the hidden commas keep screen
+      // The column does the separating visually; the hidden comma keeps screen
       // readers from welding "Black Belt News NetworkSelma, AL".
       place && el('span', { class: 'roster__place' }, [el('span', { class: 'visually-hidden', text: ', ' }), place]),
-      el('span', { class: 'roster__coverage' }, [el('span', { class: 'visually-hidden', text: ', ' }), member.coverage]),
     ]);
 
     const enter = (): void => callbacks.onLight(member.id);
