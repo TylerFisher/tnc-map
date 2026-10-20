@@ -32,7 +32,6 @@ function main(): void {
   applyEmbedConfig(config);
 
   const searchInput = mustFind<HTMLInputElement>('#search');
-  const countEl = mustFind('#count');
   const countLive = mustFind('#count-live');
   const emptyEl = mustFind('#roster-empty');
   const listEl = mustFind('#roster');
@@ -76,7 +75,6 @@ function main(): void {
     map.reflect(new Set(results.map((m) => m.id)));
 
     const trimmed = query.trim();
-    countEl.textContent = countLabel(results.length, trimmed);
 
     const isEmpty = results.length === 0;
     emptyEl.hidden = !isEmpty;
@@ -84,8 +82,8 @@ function main(): void {
     if (isEmpty) writeEmptyState(emptyEl, trimmed, searchInput, apply);
     else emptyEl.replaceChildren();
 
-    // The visible count updates on every keystroke; the announcement waits, so
-    // a screen reader is not read a new total for every character typed.
+    // Screen-reader only. Debounced so a new total isn't read for every
+    // character typed.
     window.clearTimeout(announceTimer);
     announceTimer = window.setTimeout(() => {
       countLive.textContent = countLabel(results.length, trimmed);
@@ -147,7 +145,7 @@ function writeEmptyState(
   target.replaceChildren(
     document.createTextNode(`No members match “${query}”. Try a place, a state, or a subject — `),
     clearButton,
-    document.createTextNode(` to see all ${members.length}.`),
+    document.createTextNode(' to see all members.'),
   );
 }
 
